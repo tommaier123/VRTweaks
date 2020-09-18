@@ -40,10 +40,6 @@ namespace VRTweaks
             {
                 new VRTweaks();
             }
-            if (scene.name == "Main")
-            {
-
-            }
         }
     }
 
@@ -74,26 +70,60 @@ namespace VRTweaks
         private void Awake()
         {
             File.AppendAllText("VRTweaksLog.txt", "Mono Behaviour Started" + Environment.NewLine);
+            SceneManager.sceneLoaded += new UnityAction<Scene, LoadSceneMode>(OnSceneLoaded);
         }
 
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                if (XRSettings.loadedDeviceName == "Oculus")
+                Recenter();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                RemoveComponents();
+            }
+        }
+
+        public static void Recenter()
+        {
+            if (XRSettings.loadedDeviceName == "Oculus")
+            {
+                File.AppendAllText("VRTweaksLog.txt", "Recentering Oculus" + Environment.NewLine);
+                InputTracking.Recenter();
+            }
+            if (XRSettings.loadedDeviceName == "OpenVR")
+            {
+                File.AppendAllText("VRTweaksLog.txt", "Recentering OpenVR" + Environment.NewLine);
+                Valve.VR.OpenVR.System.ResetSeatedZeroPose();
+                Valve.VR.OpenVR.Compositor.SetTrackingSpace(Valve.VR.ETrackingUniverseOrigin.TrackingUniverseSeated);
+            }
+        }
+
+        public static void RemoveComponents()
+        {
+            foreach (WBOIT w in FindObjectsOfType(typeof(WBOIT)) as WBOIT[])
+            {
+                w.enabled = false;
+            }
+
+            foreach (PlayerMask m in FindObjectsOfType(typeof(PlayerMask)) as PlayerMask[])
+            {
+                m.enabled = false;
+                m.gameObject.SetActive(false);
+
+                foreach(MeshFilter f in m.GetAllComponentsInChildren<MeshFilter>())
                 {
-                    File.AppendAllText("VRTweaksLog.txt", "Recentering Oculus" + Environment.NewLine);
-                    InputTracking.Recenter();
-                }
-                if (XRSettings.loadedDeviceName == "OpenVR")
-                {
-                    File.AppendAllText("VRTweaksLog.txt", "Recentering OpenVR" + Environment.NewLine);
-                    Valve.VR.OpenVR.System.ResetSeatedZeroPose();
-                    Valve.VR.OpenVR.Compositor.SetTrackingSpace(Valve.VR.ETrackingUniverseOrigin.TrackingUniverseSeated);
+                    f.mesh = null;
                 }
             }
         }
 
-        public static VRTweaks GetInstance { get => s_instance; private set => s_instance = value; }
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            Recenter();
+            RemoveComponents();
+        }
     }
 }
