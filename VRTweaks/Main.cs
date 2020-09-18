@@ -49,6 +49,8 @@ namespace VRTweaks
 
     public class VRTweaks : MonoBehaviour
     {
+        private static VRTweaks s_instance;
+
         public VRTweaks()
         {
             if (Loader.Instance == null)
@@ -65,6 +67,8 @@ namespace VRTweaks
             {
                 Loader.Instance.Awake();
             }
+
+            DontDestroyOnLoad(gameObject);
         }
 
         private void Awake()
@@ -89,5 +93,7 @@ namespace VRTweaks
                 }
             }
         }
+
+        public static VRTweaks GetInstance { get => s_instance; private set => s_instance = value; }
     }
 }
