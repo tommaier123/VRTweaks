@@ -90,12 +90,10 @@ namespace VRTweaks
         {
             if (XRSettings.loadedDeviceName == "Oculus")
             {
-                File.AppendAllText("VRTweaksLog.txt", "Recentering Oculus" + Environment.NewLine);
                 InputTracking.Recenter();
             }
             if (XRSettings.loadedDeviceName == "OpenVR")
             {
-                File.AppendAllText("VRTweaksLog.txt", "Recentering OpenVR" + Environment.NewLine);
                 Valve.VR.OpenVR.System.ResetSeatedZeroPose();
                 Valve.VR.OpenVR.Compositor.SetTrackingSpace(Valve.VR.ETrackingUniverseOrigin.TrackingUniverseSeated);
             }
@@ -113,11 +111,39 @@ namespace VRTweaks
                 m.enabled = false;
                 m.gameObject.SetActive(false);
 
-                foreach(MeshFilter f in m.GetAllComponentsInChildren<MeshFilter>())
+                foreach (MeshFilter f in m.GetAllComponentsInChildren<MeshFilter>())
                 {
                     f.mesh = null;
                 }
             }
+
+            /*
+            foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
+            {
+                if (m.name.Equals("airsack_fish_geo"))
+                {
+                    foreach (SkinnedMeshRenderer r in m.GetAllComponentsInChildren<SkinnedMeshRenderer>())
+                    {
+                        foreach (Material mat in r.materials)
+                        {
+                            if (mat.shaderKeywords.Where(x => x.Equals("WBOIT")).Count() > 0)
+                            {
+                                mat.DisableKeyword("WBOIT");
+                                File.AppendAllText("VRTweaksLog.txt", "Shader Keyword Disabled" + Environment.NewLine);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            foreach (Material m in FindObjectsOfType(typeof(Material)) as Material[])
+            {
+                m.DisableKeyword("WBOIT");
+                File.AppendAllText("VRTweaksLog.txt", m.name + " " + String.Join(", ", m.shaderKeywords) + Environment.NewLine);
+            }
+            
+            Shader.DisableKeyword("WBOIT");
+            */
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
