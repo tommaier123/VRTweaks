@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.XR;
+using VRTweaks.SnapTurning;
 
 namespace VRTweaks
 {
@@ -23,6 +24,8 @@ namespace VRTweaks
         public static void Initialize()
         {
             File.AppendAllText("VRTweaksLog.txt", "Initializing" + Environment.NewLine);
+
+            SnapTurningPatcher.Initialize();
 
             Harmony harmony = new Harmony("VRTweaks");
             harmony.PatchAll();
