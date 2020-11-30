@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 using SMLHelper.V2.Utility;
 using UnityEngine;
 
-namespace VRTweaks.SnapTurning
+namespace VRTweaks.SnapTurn
 {
-
-    //TODO: rename to SnapTurningConfig
     public static class Config
     {
         public static bool EnableSnapTurning = true;

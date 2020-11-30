@@ -4,11 +4,11 @@ using SMLHelper.V2.Utility;
 using UnityEngine;
 using UnityEngine.XR;
 
-namespace VRTweaks.SnapTurning
+namespace VRTweaks.SnapTurn
 {
     [HarmonyPatch(typeof(MainCameraControl))]
     [HarmonyPatch("Update")]
-    public static class SnapTurningPatcher
+    public static class SnapTurning
     {
         private static float SnapAngle => Config.SnapAngles[Config.SnapAngleChoiceIndex];
         private static bool _didLookRight;

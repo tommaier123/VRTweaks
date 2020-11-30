@@ -2,7 +2,7 @@
 using SMLHelper.V2.Utility;
 using UnityEngine;
 
-namespace VRTweaks.SnapTurning
+namespace VRTweaks.SnapTurn
 {
     public class Options : ModOptions
     {
