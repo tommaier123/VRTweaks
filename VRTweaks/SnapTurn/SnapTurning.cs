@@ -16,7 +16,7 @@ namespace VRTweaks.SnapTurn
         private static bool _isLookingLeft;
         private static bool _isLookingRight;
         private static bool _isLookingUpOrDown;
-        private static bool _isLooking;
+        private static bool _isLookingLeftOrRight;
         private static bool _shouldSnapTurn;
 
         public static void Initialize()
@@ -35,7 +35,7 @@ namespace VRTweaks.SnapTurn
 
             UpdateFields();
 
-            if(_isLookingUpOrDown)
+            if (_isLookingUpOrDown)
             {
                 return false; //Disable looking up or down with the joystick
             }
@@ -53,13 +53,13 @@ namespace VRTweaks.SnapTurn
         {
             _didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight) || KeyCodeUtils.GetKeyDown(Config.KeybindKeyRight);
             _didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft) || KeyCodeUtils.GetKeyDown(Config.KeybindKeyLeft);
-            _isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft);
-            _isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
-            _isLooking = _didLookLeft || _didLookRight || _isLookingLeft || _isLookingRight;
-            _shouldSnapTurn = XRSettings.enabled && _isLooking;
-            _isLookingUpOrDown = GameInput.GetButtonDown(GameInput.Button.LookUp) 
-                || GameInput.GetButtonDown(GameInput.Button.LookDown) 
-                || GameInput.GetButtonHeld(GameInput.Button.LookUp) 
+            _isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight) || KeyCodeUtils.GetKeyHeld(Config.KeybindKeyRight);
+            _isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft) || KeyCodeUtils.GetKeyHeld(Config.KeybindKeyLeft);
+            _isLookingLeftOrRight = _didLookLeft || _didLookRight || _isLookingLeft || _isLookingRight;
+            _shouldSnapTurn = XRSettings.enabled && _isLookingLeftOrRight;
+            _isLookingUpOrDown = GameInput.GetButtonDown(GameInput.Button.LookUp)
+                || GameInput.GetButtonDown(GameInput.Button.LookDown)
+                || GameInput.GetButtonHeld(GameInput.Button.LookUp)
                 || GameInput.GetButtonHeld(GameInput.Button.LookDown);
         }
 
