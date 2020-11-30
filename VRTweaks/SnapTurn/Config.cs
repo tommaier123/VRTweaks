@@ -18,7 +18,7 @@ namespace VRTweaks.SnapTurn
 
         public static void Load()
         {
-            EnableSnapTurning = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, true);
+            EnableSnapTurning = PlayerPrefsExtra.GetBool(OptionsMenu.PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, true);
             SnapAngleChoiceIndex = GetSnapAngleChoiceIndex(SnapType.Default);
             KeybindKeyLeft = PlayerPrefsExtra.GetKeyCode("SMLHelperExampleModKeybindLeft", KeyCode.LeftArrow);
             KeybindKeyRight = PlayerPrefsExtra.GetKeyCode("SMLHelperExampleModKeybindRight", KeyCode.RightArrow);
@@ -40,7 +40,7 @@ namespace VRTweaks.SnapTurn
             int result = 0;
             if (snapType == SnapType.Default)
             {
-                result = PlayerPrefs.GetInt(Options.PLAYER_PREF_KEY_SNAP_ANGLE, 0);
+                result = PlayerPrefs.GetInt(OptionsMenu.PLAYER_PREF_KEY_SNAP_ANGLE, 0);
             }
 
             return result;

@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace VRTweaks.SnapTurn
 {
-    public class Options : ModOptions
+    public class OptionsMenu : ModOptions
     {
         public const string PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING = "SnapTurningTogglePlayerPrefKey";
         public const string PLAYER_PREF_KEY_SNAP_ANGLE = "SnapAnglePlayerPrefKey";
         private const string TOGGLE_CHANGED_ID_SNAP_TURNING = "SnapTurningId";
         private const string CHOICE_CHANGED_ID_SNAP_ANGLE = "SnapAngleId";
 
-        public Options() : base("Snap Turning")
+        public OptionsMenu() : base("Snap Turning")
         {
             ToggleChanged += Options_ToggleChanged;
             ChoiceChanged += Options_ChoiceChanged;

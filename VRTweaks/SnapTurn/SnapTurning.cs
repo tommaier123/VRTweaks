@@ -22,7 +22,7 @@ namespace VRTweaks.SnapTurn
         public static void Initialize()
         {
             Config.Load();
-            OptionsPanelHandler.RegisterModOptions(new Options());
+            OptionsPanelHandler.RegisterModOptions(new OptionsMenu());
         }
 
         [HarmonyPrefix]
