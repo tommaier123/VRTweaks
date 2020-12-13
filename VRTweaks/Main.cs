@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.XR;
+using VRTweaks.SnapTurn;
 
 namespace VRTweaks
 {
@@ -65,6 +66,8 @@ namespace VRTweaks
             }
 
             DontDestroyOnLoad(gameObject);
+
+            SnapTurning.Initialize();
         }
 
         private void Awake()
@@ -83,6 +86,11 @@ namespace VRTweaks
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 RemoveComponents();
+            }
+
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                VROptions.gazeBasedCursor = !VROptions.gazeBasedCursor;
             }
         }
 
