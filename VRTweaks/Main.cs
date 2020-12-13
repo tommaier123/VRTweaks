@@ -25,8 +25,6 @@ namespace VRTweaks
         {
             File.AppendAllText("VRTweaksLog.txt", "Initializing" + Environment.NewLine);
 
-            SnapTurning.Initialize();
-
             Harmony harmony = new Harmony("VRTweaks");
             harmony.PatchAll();
 
@@ -68,6 +66,8 @@ namespace VRTweaks
             }
 
             DontDestroyOnLoad(gameObject);
+
+            SnapTurning.Initialize();
         }
 
         private void Awake()
