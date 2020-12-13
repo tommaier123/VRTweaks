@@ -9,7 +9,7 @@ namespace VRTweaks
         [HarmonyPostfix]
         public static void Postfix(ref bool __result)
         {
-            __result = true;
+            __result = VROptions.gazeBasedCursor;
         }
     }
 }
