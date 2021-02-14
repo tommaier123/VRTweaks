@@ -10,13 +10,19 @@ namespace VRTweaks
     {
         static GazeCursorEnabler()
         {
-            VROptions.gazeBasedCursor = true;
+            if(XRSettings.isDeviceActive)
+            {
+                VROptions.gazeBasedCursor = true;
+            }
         }
 
         [HarmonyPostfix]
         public static void Postfix(ref bool __result)
         {
-            __result = VROptions.gazeBasedCursor;
+            if(XRSettings.isDeviceActive)
+            {
+                __result = VROptions.gazeBasedCursor;
+            }
         }
     }
 
@@ -28,7 +34,10 @@ namespace VRTweaks
         [HarmonyPostfix]
         public static void Postfix(ref Vector2 __result)
         {
-            __result = new Vector2((float)XRSettings.eyeTextureWidth, (float)XRSettings.eyeTextureHeight) * 0.5f;
+            if(XRSettings.isDeviceActive)
+            {
+                __result = new Vector2((float)XRSettings.eyeTextureWidth, (float)XRSettings.eyeTextureHeight) * 0.5f;
+            }
         }
     }
 }
