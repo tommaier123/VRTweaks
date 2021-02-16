@@ -57,6 +57,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
@@ -70,12 +73,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModdedClasses\InputTracking.cs" />
+    <Compile Include="ModdedClasses\XRDevice.cs" />
+    <Compile Include="ModdedClasses\XRNodeState.cs" />
     <Compile Include="ModdedClasses\XRSettings.cs" />
     <Compile Include="Patcher.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
