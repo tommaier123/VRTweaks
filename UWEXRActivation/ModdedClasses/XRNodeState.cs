@@ -1,6 +1,7 @@
 ﻿// Unity C# reference source
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
+// This file was copied from here:
 // https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/XR/ScriptBindings/VRNodeState.cs/#L154
 
 using System;
