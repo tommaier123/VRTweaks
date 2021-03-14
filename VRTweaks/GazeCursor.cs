@@ -4,40 +4,27 @@ using UnityEngine.XR;
 
 namespace VRTweaks
 {
-    [HarmonyPatch(typeof(VROptions))]
-    [HarmonyPatch("GetUseGazeBasedCursor")]
-    public static class GazeCursorEnabler
+    [HarmonyPatch]
+    public static class GazeCursorPatches
     {
-        static GazeCursorEnabler()
+        [HarmonyPatch(typeof(VROptions), nameof(VROptions.GetUseGazeBasedCursor))]
+        [HarmonyPostfix]
+        public static void GetUseGazeBasedCursor_Postfix(ref bool __result)
         {
             if(XRSettings.isDeviceActive)
-            {
-                VROptions.gazeBasedCursor = true;
-            }
+                __result = true;
         }
 
-        [HarmonyPostfix]
-        public static void Postfix(ref bool __result)
-        {
-            if(XRSettings.isDeviceActive)
-            {
-                __result = VROptions.gazeBasedCursor;
-            }
-        }
-    }
 
-
-    [HarmonyPatch(typeof(FPSInputModule))]
-    [HarmonyPatch("GetCursorScreenPosition")]
-    public static class GazeCursorPositioner
-    {
+        [HarmonyPatch(typeof(FPSInputModule), nameof(FPSInputModule.GetCursorScreenPosition))]
         [HarmonyPostfix]
-        public static void Postfix(ref Vector2 __result)
+        public static void GetCursorScreenPosition_Postfix(ref Vector2 __result)
         {
-            if(XRSettings.isDeviceActive)
+            if (XRSettings.isDeviceActive)
             {
                 __result = new Vector2((float)XRSettings.eyeTextureWidth, (float)XRSettings.eyeTextureHeight) * 0.5f;
             }
         }
     }
+
 }

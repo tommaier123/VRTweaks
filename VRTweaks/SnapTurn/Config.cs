@@ -1,56 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SMLHelper.V2.Utility;
+﻿using SMLHelper.V2.Json;
+using SMLHelper.V2.Options.Attributes;
 using UnityEngine;
 
 namespace VRTweaks.SnapTurn
 {
-    public static class Config
+    [Menu("Snap Turning", SaveOn = MenuAttribute.SaveEvents.ChangeValue|MenuAttribute.SaveEvents.SaveGame|MenuAttribute.SaveEvents.QuitGame, LoadOn = MenuAttribute.LoadEvents.MenuRegistered|MenuAttribute.LoadEvents.MenuOpened)]
+    public class Config: ConfigFile
     {
-        public static bool EnableSnapTurning = true;
-        public static int SnapAngleChoiceIndex = 0;
-        public static float[] SnapAngles = { 45, 90, 22.5f };
-        public static KeyCode KeybindKeyLeft;
-        public static KeyCode KeybindKeyRight;
+        public static Config instance;
+        internal static float[] SnapAngles = { 22.5f, 45f, 90f };
 
-        public static void Load()
+        public Config()
         {
-            EnableSnapTurning = PlayerPrefsExtra.GetBool(OptionsMenu.PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, true);
-            SnapAngleChoiceIndex = GetSnapAngleChoiceIndex(SnapType.Default);
-            KeybindKeyLeft = PlayerPrefsExtra.GetKeyCode("SMLHelperExampleModKeybindLeft", KeyCode.LeftArrow);
-            KeybindKeyRight = PlayerPrefsExtra.GetKeyCode("SMLHelperExampleModKeybindRight", KeyCode.RightArrow);
+            instance = this;
         }
 
-        private static int GetSnapAngleChoiceIndex(SnapType snapType)
-        {
-            int result = GetChoiceIndexForSnapType(snapType);
-            if (result > SnapAngles.Length)
-            {
-                result = 0;
-            }
+        [Toggle("Enabled")]
+        public bool EnableSnapTurning = true;
 
-            return result;
-        }
+        [Toggle("Unlock Controller Virtical Look")]
+        public bool EnableVirticalLook = false;
 
-        private static int GetChoiceIndexForSnapType(SnapType snapType)
-        {
-            int result = 0;
-            if (snapType == SnapType.Default)
-            {
-                result = PlayerPrefs.GetInt(OptionsMenu.PLAYER_PREF_KEY_SNAP_ANGLE, 0);
-            }
+        [Choice("Angle", options: new string[] {  "22.5", "45", "90" })]
+        public int SnapAngleChoiceIndex = 1;
 
-            return result;
-        }
-    }
+        [Keybind("Keyboard Left")]
+        public KeyCode KeybindKeyLeft = KeyCode.LeftArrow;
 
-    public enum SnapType
-    {
-        Default,
-        Seamoth,
-        Prawn
+        [Keybind("Keyboard Right")]
+        public KeyCode KeybindKeyRight = KeyCode.RightArrow;
+
     }
 }
