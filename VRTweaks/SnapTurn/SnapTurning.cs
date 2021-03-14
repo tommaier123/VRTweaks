@@ -6,7 +6,7 @@ using UnityEngine.XR;
 
 namespace VRTweaks.SnapTurn
 {
-    [HarmonyPatch]
+    [HarmonyPatch(typeof(MainCameraControl), nameof(MainCameraControl.Update))]
     public static class SnapTurning
     {
         private static float SnapAngle => Config.SnapAngles[Config.instance.SnapAngleChoiceIndex];
@@ -19,10 +19,12 @@ namespace VRTweaks.SnapTurn
         private static bool _shouldSnapTurn;
 
 
-        [HarmonyPatch(typeof(MainCameraControl), nameof(MainCameraControl.Update))]
         [HarmonyPrefix]
-        public static bool Prefix()
+        public static bool Prefix(MainCameraControl __instance, out Vector3 __state)
         {
+            __state = __instance.viewModel.transform.localPosition;
+            Debug.Log($"prefix LocalPosition {__state}");
+
             if (!Config.instance.EnableSnapTurning)
             {
                 return true; //Enter vanilla method
@@ -77,6 +79,13 @@ namespace VRTweaks.SnapTurn
             }
 
             return newEulerAngles;
+        }
+
+        [HarmonyPostfix]
+        public static void Postfix(MainCameraControl __instance, Vector3 __state)
+        {
+            Debug.Log($"LocalPosition {__state}");
+            __instance.viewModel.transform.localPosition = __state;
         }
     }
 }
