@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 public static class Patcher
@@ -13,7 +14,7 @@ public static class Patcher
 
     public static void Patch(AssemblyDefinition target)
     {
-        var path = Path.Combine(Paths.GameRootPath, @"BepInEx\patchers\UWEXRActivation.dll");
+        var path = Assembly.GetExecutingAssembly().Location;
 
         if (!File.Exists(path))
         {
