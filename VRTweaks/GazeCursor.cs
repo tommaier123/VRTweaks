@@ -16,7 +16,7 @@ namespace VRTweaks
         }
 
 
-        [HarmonyPatch(typeof(FPSInputModule), nameof(FPSInputModule.GetCursorScreenPosition))]
+        [HarmonyPatch(typeof(FPSInputModule), "GetCursorScreenPosition")]
         [HarmonyPostfix]
         public static void GetCursorScreenPosition_Postfix(ref Vector2 __result)
         {

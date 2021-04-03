@@ -6,7 +6,7 @@ using UnityEngine.XR;
 
 namespace VRTweaks.SnapTurn
 {
-    [HarmonyPatch(typeof(MainCameraControl), nameof(MainCameraControl.Update))]
+    [HarmonyPatch(typeof(MainCameraControl), "Update")]
     public static class SnapTurning
     {
         private static float SnapAngle => Config.SnapAngles[Config.instance.SnapAngleChoiceIndex];
