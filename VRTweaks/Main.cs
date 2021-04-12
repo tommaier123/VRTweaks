@@ -73,11 +73,6 @@ namespace VRTweaks
             {
                 RemoveComponents();
             }
-
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                VROptions.gazeBasedCursor = !VROptions.gazeBasedCursor;
-            }
         }
 
         public static void Recenter()

@@ -100,7 +100,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GazeCursor.cs" />
     <Compile Include="SnapTurn\Config.cs" />
     <Compile Include="SnapTurn\SnapTurning.cs" />
   </ItemGroup>
