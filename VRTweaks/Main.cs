@@ -25,7 +25,7 @@ namespace VRTweaks
 
             OptionsPanelHandler.RegisterModOptions<Config>();
             new GameObject("_VRTweaks").AddComponent<VRTweaks>();
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly() ,"VRTweaks");
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), "VRTweaks");
 
 
             File.AppendAllText("VRTweaksLog.txt", "Done Initializing" + Environment.NewLine);
@@ -72,11 +72,6 @@ namespace VRTweaks
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 RemoveComponents();
-            }
-
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                VROptions.gazeBasedCursor = !VROptions.gazeBasedCursor;
             }
         }
 

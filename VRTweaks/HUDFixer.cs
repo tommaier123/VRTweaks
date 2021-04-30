@@ -1,0 +1,30 @@
+﻿using HarmonyLib;
+using UnityEngine;
+
+namespace VRTweaks
+{
+    [HarmonyPatch(typeof(uGUI_HealthBar), "Awake")]
+    public static class HUDFixer
+    {
+        [HarmonyPostfix]
+        public static void Postfix(uGUI_HealthBar __instance)
+        {
+       //     //Shift the healthbar, oxygen meter, and temperature parent UI element to the right
+            Debug.Log("Parent: " + __instance.transform.parent.parent);
+            __instance.transform.parent.localPosition += new Vector3(200, 0, 0);
+         //   MiscSettings.SetUIScale(0.7f);
+
+        }
+    }
+
+    [HarmonyPatch(typeof(Subtitles), "Update")]
+    public static class MessageFixer
+    {
+        [HarmonyPostfix]
+        public static void Postfix(Subtitles __instance)
+        {
+            __instance.transform.parent.localPosition = new Vector3(-537.6f, -432.5f, 0.0f);
+        }
+    }
+
+}
