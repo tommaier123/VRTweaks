@@ -69,19 +69,6 @@ namespace VRTweaks
 
             if (__instance.transform.parent != null && VRHandsController.rightController.transform != null)
             {
-                IPrefabRequest request = UWE.PrefabDatabase.GetPrefabForFilenameAsync("H:/Steam Games SSD/steamapps/common/SubnauticaZero/QMods/VRTweaks/controller.prefab");
-               // yield return request;
-                request.TryGetPrefab(out GameObject originalPrefab);
-                GameObject resultPrefab = Object.Instantiate(originalPrefab);
-                //  Debug.Log("Parent:" + __instance.transform.parent);
-                // __instance.transform.SetParent(VRHandsController.rightController.transform);
-
-                // Debug.Log("__instance:" + __instance.transform.parent.transform);
-                //  __instance.transform.SetParent(VRHandsController.rightController.transform);
-                //   Debug.Log("__instance:" + __instance.hand.position);
-                //__instance.GetComponent<Canvas>().transform.SetParent(VRHandsController.rightController.transform);
-                //__instance.transform.position = new Vector3(x, y, z+0.5f);
-                resultPrefab.transform.position = new Vector3(x, y, z + 0.5f);
                 __instance.transform.position = new Vector3(x, y, z + 0.5f);
                 //   __instance.transform.position = new Vector3(InputTracking.GetLocalPosition(XRNode.RightHand).x, InputTracking.GetLocalPosition(XRNode.RightHand).y,InputTracking.GetLocalPosition(XRNode.RightHand).z).normalized;
             }

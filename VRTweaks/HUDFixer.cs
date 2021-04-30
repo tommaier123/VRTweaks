@@ -10,9 +10,8 @@ namespace VRTweaks
         public static void Postfix(uGUI_HealthBar __instance)
         {
        //     //Shift the healthbar, oxygen meter, and temperature parent UI element to the right
-            Debug.Log("Parent: " + __instance.transform.parent.parent);
             __instance.transform.parent.localPosition += new Vector3(200, 0, 0);
-         //   MiscSettings.SetUIScale(0.7f);
+            MiscSettings.SetUIScale(0.7f);
 
         }
     }
