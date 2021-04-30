@@ -67,7 +67,7 @@ namespace VRTweaks
             float y = InputTracking.GetLocalPosition(XRNode.RightHand).y;
             float z = InputTracking.GetLocalPosition(XRNode.RightHand).z;
 
-            if (__instance.transform.parent != null && VRHandsController.rightController.transform != null)
+            if (__instance.transform != null )
             {
                 __instance.transform.position = new Vector3(x, y, z + 0.5f);
                 //   __instance.transform.position = new Vector3(InputTracking.GetLocalPosition(XRNode.RightHand).x, InputTracking.GetLocalPosition(XRNode.RightHand).y,InputTracking.GetLocalPosition(XRNode.RightHand).z).normalized;
