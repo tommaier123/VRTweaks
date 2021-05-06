@@ -12,6 +12,7 @@ using System.Reflection;
 using SMLHelper.V2.Handlers;
 using UWE;
 using System.Collections;
+using System.Linq;
 
 namespace VRTweaks
 {
@@ -57,6 +58,7 @@ namespace VRTweaks
             yield return new WaitForSeconds(1);
 
             Recenter();
+           // FixSkinnedMeshRenderer();
             RemoveComponents();
             yield break;
         }
@@ -73,6 +75,8 @@ namespace VRTweaks
             {
                 RemoveComponents();
             }
+            FixSkinnedMeshRenderer();
+            FixMeshRenderer();
         }
 
         public static void Recenter()
@@ -92,12 +96,52 @@ namespace VRTweaks
                 return;
             }
         }
+        public static void FixSkinnedMeshRenderer()
+        {
+            foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
+            {
+                foreach (SkinnedMeshRenderer r in m.GetAllComponentsInChildren<SkinnedMeshRenderer>())
+                {
+                    foreach (Material mat in r.materials)
+                    {
+                        foreach (var shaderkeys in mat.shaderKeywords)
+                        {
+                            if (shaderkeys.Contains("WBOIT"))
+                            {
+                                mat.DisableKeyword("WBOIT");
+                                File.AppendAllText("VRTweaksLog.txt",mat.name + " WBOIT Shader Keyword Disabled" + Environment.NewLine);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public static void FixMeshRenderer()
+        {
+           
+            foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
+            {
+                foreach (MeshRenderer r in m.GetAllComponentsInChildren<MeshRenderer>())
+                {
+                    foreach (Material mat in r.materials)
+                    {
+                        if (mat.shaderKeywords.Where(x => x.Equals("WBOIT")).Count() > 0)
+                        {
+                            bool usernameExists = File.ReadAllText("Logs/mats2.txt").Contains(mat.name);
+                            if (!usernameExists)
+                            {
+                                File.AppendAllText("Logs/mats2.txt", "Name: " + mat.name + " , ShaderName: " + mat.name + " , ShaderKeys: " + String.Join(", ", mat.shaderKeywords) + ", WBOITEnabled: " + String.Join(", ", mat.GetShaderPassEnabled("FX/WBOIT") + Environment.NewLine));
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         public static void RemoveComponents()
         {
-
+            //FixSkinnedMeshRenderer();
             FindObjectsOfType<WBOIT>()?.ForEach((w) => w.enabled = false);
-
             FindObjectsOfType<PlayerMask>()?.ForEach((m) =>
             {
                 m.enabled = false;
@@ -106,33 +150,28 @@ namespace VRTweaks
             });
 
             /*
-            foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
-            {
-                if (m.name.Equals("airsack_fish_geo"))
-                {
-                    foreach (SkinnedMeshRenderer r in m.GetAllComponentsInChildren<SkinnedMeshRenderer>())
-                    {
-                        foreach (Material mat in r.materials)
-                        {
-                            if (mat.shaderKeywords.Where(x => x.Equals("WBOIT")).Count() > 0)
-                            {
-                                mat.DisableKeyword("WBOIT");
-                                File.AppendAllText("VRTweaksLog.txt", "Shader Keyword Disabled" + Environment.NewLine);
-                            }
-                        }
-                    }
-                }
-            }
-            
-            foreach (Material m in FindObjectsOfType(typeof(Material)) as Material[])
-            {
-                m.DisableKeyword("WBOIT");
-                File.AppendAllText("VRTweaksLog.txt", m.name + " " + String.Join(", ", m.shaderKeywords) + Environment.NewLine);
-            }
-            
-            Shader.DisableKeyword("WBOIT");
+          foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
+          {
+              if (m.name.Equals("airsack_fish_geo"))
+              {
+                  foreach (SkinnedMeshRenderer r in m.GetAllComponentsInChildren<SkinnedMeshRenderer>())
+                  {
+                      foreach (Material mat in r.materials)
+                      {
+                          if (mat.shaderKeywords.Where(x => x.Equals("WBOIT")).Count() > 0)
+                          {
+                              mat.DisableKeyword("WBOIT");
+                              File.AppendAllText("VRTweaksLog.txt", "Shader Keyword Disabled" + Environment.NewLine);
+                          }
+                      }
+                  }
+              }
+          }
             */
-        }
 
+            // Shader.DisableKeyword("WBOIT");
+
+        }
     }
 }
+

@@ -9,14 +9,14 @@ namespace VRTweaks
         [HarmonyPostfix]
         public static void Postfix(uGUI_HealthBar __instance)
         {
-       //     //Shift the healthbar, oxygen meter, and temperature parent UI element to the right
-            __instance.transform.parent.localPosition += new Vector3(200, 0, 0);
+            //     //Shift the healthbar, oxygen meter, and temperature parent UI element to the right
+            __instance.transform.parent.localPosition += new Vector3(300, 0, 0);
             MiscSettings.SetUIScale(0.7f);
 
         }
     }
 
-    [HarmonyPatch(typeof(Subtitles), "Update")]
+    /*[HarmonyPatch(typeof(Subtitles), "Update")]
     public static class MessageFixer
     {
         [HarmonyPostfix]
@@ -24,6 +24,5 @@ namespace VRTweaks
         {
             __instance.transform.parent.localPosition = new Vector3(-537.6f, -432.5f, 0.0f);
         }
-    }
-
+    }*/
 }

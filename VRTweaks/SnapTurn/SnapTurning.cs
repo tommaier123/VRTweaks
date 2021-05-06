@@ -6,7 +6,7 @@ using UnityEngine.XR;
 
 namespace VRTweaks.SnapTurn
 {
-    [HarmonyPatch(typeof(MainCameraControl), nameof(MainCameraControl.Update))]
+    [HarmonyPatch(typeof(MainCameraControl), "Update")]
     public static class SnapTurning
     {
         private static float SnapAngle => Config.SnapAngles[Config.instance.SnapAngleChoiceIndex];
@@ -23,9 +23,8 @@ namespace VRTweaks.SnapTurn
         public static bool Prefix(MainCameraControl __instance, out Vector3 __state)
         {
             __state = __instance.viewModel.transform.localPosition;
-            Debug.Log($"prefix LocalPosition {__state}");
 
-            if (!Config.instance.EnableSnapTurning)
+            if (!Config.instance.EnableSnapTurning || Player.main.isPiloting)
             {
                 return true; //Enter vanilla method
             }
@@ -84,7 +83,6 @@ namespace VRTweaks.SnapTurn
         [HarmonyPostfix]
         public static void Postfix(MainCameraControl __instance, Vector3 __state)
         {
-            Debug.Log($"LocalPosition {__state}");
             __instance.viewModel.transform.localPosition = __state;
         }
     }

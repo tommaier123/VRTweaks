@@ -6,7 +6,7 @@ using UnityEngine.XR;
 
 namespace VRTweaks
 {
-    public enum ControllerLayout
+   /* public enum ControllerLayout
     {
         // Token: 0x04003C52 RID: 15442
         Automatic,
@@ -96,7 +96,7 @@ namespace VRTweaks
             else
             {
                 ik.solver.leftHandEffector.target = null;
-                ik.solver.rightHandEffector.target = rightController.transform;
+                ik.solver.rightHandEffector.target = null;
             }
         }
     }
@@ -158,7 +158,7 @@ namespace VRTweaks
 
                 Traverse tInstance = Traverse.Create(__instance);
                 tInstance.Field("leftAim").Field("shouldAim").SetValue(false);
-                tInstance.Field("rightAim").Field("shouldAim").SetValue(true);
+                tInstance.Field("rightAim").Field("shouldAim").SetValue(false);
 
                 ik.solver.leftHandEffector.target = null;
                 ik.solver.rightHandEffector.target = null;
@@ -186,7 +186,7 @@ namespace VRTweaks
 
         }
 
-    }
+    }*/
 }
 
 

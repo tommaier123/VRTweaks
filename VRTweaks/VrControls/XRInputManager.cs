@@ -3,10 +3,10 @@ using UnityEngine;
 using UnityEngine.XR;
 using HarmonyLib;
 using System;
-
+using QModManager.Utility;
 namespace VRTweaks
 {
-   /* enum Controller
+ /*   enum Controller
     {
         Left,
         Right
@@ -18,8 +18,6 @@ namespace VRTweaks
         private readonly List<InputDevice> xrDevices = new List<InputDevice>();
         public static InputDevice leftController;
         public static InputDevice rightController;
-        public static GameObject holder;
-        public static GameObject pointer;
         public static float thickness = 0.002f;
         private XRInputManager()
         {
@@ -156,34 +154,54 @@ namespace VRTweaks
             {
                 case KeyCode.JoystickButton0:
                     // ControllerButtonA
-                    return Get(Controller.Right, CommonUsages.primaryButton);
-                case KeyCode.JoystickButton1:
-                    // ControllerButtonB
+                    Debug.Log("Button0");
                     return Get(Controller.Right, CommonUsages.secondaryButton);
+
+                case KeyCode.JoystickButton1:
+                    Debug.Log("Button1");
+                    // ControllerButtonB
+                    return Get(Controller.Right, CommonUsages.primaryButton);
+
                 case KeyCode.JoystickButton2:
+                    Debug.Log("Button2");
                     // ControllerButtonX
-                    return Get(Controller.Left, CommonUsages.primaryButton);
-                case KeyCode.JoystickButton3:
-                    // ControllerButtonY
                     return Get(Controller.Left, CommonUsages.secondaryButton);
+
+                case KeyCode.JoystickButton3:
+                    Debug.Log("Button3");
+                    // ControllerButtonY
+                    return Get(Controller.Left, CommonUsages.primaryButton);
+
                 case KeyCode.JoystickButton4:
+                    Debug.Log("Button4");
                     // ControllerButtonLeftBumper
                     return Get(Controller.Left, CommonUsages.gripButton);
+
                 case KeyCode.JoystickButton5:
+                    Debug.Log("Button5");
                     // ControllerButtonRightBumper
                     return Get(Controller.Right, CommonUsages.gripButton);
+
                 case KeyCode.JoystickButton6:
                     //  return Get(Controller.Left, CommonUsages.);
-                    return false;
+                    Debug.Log("Button6");
+                    return Get(Controller.Right, CommonUsages.menuButton);
+
                 case KeyCode.JoystickButton7:
                     // ControllerButtonHome
+                    Debug.Log("Button7");
                     return Get(Controller.Left, CommonUsages.menuButton);
+
                 case KeyCode.JoystickButton8:
                     // ControllerButtonLeftStick
+                    Debug.Log("Button8");
                     return Get(Controller.Left, CommonUsages.primary2DAxisClick);
+
                 case KeyCode.JoystickButton9:
+                    Debug.Log("Button9");
                     // ControllerButtonRightStick
                     return Get(Controller.Right, CommonUsages.primary2DAxisClick);
+
                 default:
                     return false;
             }
@@ -220,17 +238,20 @@ namespace VRTweaks
 
                      axisValues[4] = xrInput.Get(Controller.Left, CommonUsages.trigger).CompareTo(0.3f);
                      axisValues[5] = xrInput.Get(Controller.Right, CommonUsages.trigger).CompareTo(0.3f);
-                    // Debug.Log("AxisValues[4]: " + axisValues[4] + " AxisValues[5]: " + axisValues[5]);
-                     axisValues[6] = 0f;
 
-                    axisValues[8] = InputTracking.GetLocalPosition(XRNode.RightHand).x;//Input.GetAxisRaw("Mouse X");
-                    axisValues[9] = InputTracking.GetLocalPosition(XRNode.RightHand).y;//Input.GetAxisRaw("Mouse Y");
+                    axisValues[6] = xrInput.Get(Controller.Left, CommonUsages.indexFinger).CompareTo(0.3f);
+                    axisValues[7] = xrInput.Get(Controller.Right, CommonUsages.indexFinger).CompareTo(0.3f);
+                    // Debug.Log("AxisValues[4]: " + axisValues[4] + " AxisValues[5]: " + axisValues[5]);
+                  //  axisValues[6] = 0f;
+
+                  //  axisValues[8] = InputTracking.GetLocalPosition(XRNode.RightHand).x;//Input.GetAxisRaw("Mouse X");
+                  //  axisValues[9] = InputTracking.GetLocalPosition(XRNode.RightHand).y;//Input.GetAxisRaw("Mouse Y");
                 }
                 if (useKeyboard)
                 {
                     axisValues[10] = Input.GetAxis("Mouse ScrollWheel");
-                    axisValues[8] = InputTracking.GetLocalPosition(XRNode.RightHand).x;//Input.GetAxisRaw("Mouse X");
-                    axisValues[9] = InputTracking.GetLocalPosition(XRNode.RightHand).y;//Input.GetAxisRaw("Mouse Y");
+                    axisValues[8] = Input.GetAxis("Mouse X"); //Input.GetAxisRaw("Mouse X");
+                    axisValues[9] = Input.GetAxis("Mouse Y");//Input.GetAxisRaw("Mouse Y");
                 }
                 for (int j = 0; j < axisValues.Length; j++)
                 {
@@ -260,97 +281,19 @@ namespace VRTweaks
                 return false;
             }
 
-/*            [HarmonyPatch(typeof(GameInput), "UpdateKeyInputs")]
+          /*  [HarmonyPatch(typeof(GameInput), "UpdateKeyInputs")]
             internal class UpdateKeyInputsPatch
             {
                 public static bool Prefix(bool useKeyboard, bool useController, GameInput ___instance)
                 {
-
                     GameInput.InputState[] InputStates = Traverse.Create(___instance).Field("inputStates").GetValue() as GameInput.InputState[];
-                    float[] axisValues = Traverse.Create(___instance).Field("axisValues").GetValue() as float[];
-                    bool controllerEnabled = (bool)Traverse.Create(___instance).Field("controllerEnabled").GetValue();
-                    List<GameInput.Input> inputs = Traverse.Create(___instance).Field("inputs").GetValue() as List<GameInput.Input>;
-                    GameInput.Device lastDevice = (GameInput.Device)Traverse.Create(___instance).Field("lastDevice").GetValue();
-                    int[] lastInputPressed = Traverse.Create(___instance).Field("lastInputPressed").GetValue() as int[];
-
-                    GameInput.ControllerLayout controllerLayout = (GameInput.ControllerLayout)Traverse.Create(___instance).Method("GetControllerLayout").GetValue();  //GameInput.GetControllerLayout();
-                    Debug.Log("controllerLayout: " + controllerLayout);
-                    float unscaledTime = Time.unscaledTime;
-                    int num = -1;
-                    PlatformServices services = PlatformUtils.main.GetServices();
-                    if (services != null)
-                    {
-                        num = services.GetActiveController();
-                    }
-                    for (int i = 0; i < inputs.Count; i++)
-                    {
-                        GameInput.InputState inputState = default(GameInput.InputState);
-                        inputState.timeDown = InputStates[i].timeDown;
-                        GameInput.Device device = inputs[i].device;
-                        KeyCode keyCodeForControllerLayout = (KeyCode)Traverse.Create(___instance).Method("GetKeyCodeForControllerLayout", inputs[i].keyCode, controllerLayout).GetValue();// GetKeyCodeForControllerLayout(inputs[i].keyCode, controllerLayout);
-                        //Debug.Log("keyCodeForControllerLayout: " + keyCodeForControllerLayout);
-                        if (keyCodeForControllerLayout != KeyCode.None)
-                        {
-                            KeyCode keyCode = keyCodeForControllerLayout;
-                            if (num >= 1)
-                            {
-                                keyCode = keyCodeForControllerLayout + num * 20;
-                            }
-                            inputState.flags |= (GameInput.InputStateFlags)Traverse.Create(___instance).Method("GetInputState", keyCode).GetValue();//  GetInputState(keyCode);
-                            if (inputState.flags != (GameInput.InputStateFlags)0U && !PlatformUtils.isConsolePlatform && (controllerEnabled || device != GameInput.Device.Controller))
-                            {
-                                lastDevice = device;
-                            }
-                        }
-                        else
-                        {
-                            bool flag = (InputStates[i].flags & GameInput.InputStateFlags.Held) > (GameInput.InputStateFlags)0U;
-                            float num2 = axisValues[(int)inputs[i].axis];
-                            bool flag2;
-                            if (inputs[i].axisPositive)
-                            {
-                                flag2 = (num2 > inputs[i].axisDeadZone);
-                            }
-                            else
-                            {
-                                flag2 = (num2 < -inputs[i].axisDeadZone);
-                            }
-                            if (flag2)
-                            {
-                                inputState.flags |= GameInput.InputStateFlags.Held;
-                            }
-                            if (flag2 && !flag)
-                            {
-                                inputState.flags |= GameInput.InputStateFlags.Down;
-                            }
-                            if (!flag2 && flag)
-                            {
-                                inputState.flags |= GameInput.InputStateFlags.Up;
-                            }
-                        }
-                        if ((inputState.flags & GameInput.InputStateFlags.Down) != (GameInput.InputStateFlags)0U)
-                        {
-                            lastInputPressed[(int)device] = i;
-                            inputState.timeDown = unscaledTime;
-                        }
-                        if ((device == GameInput.Device.Controller && !useController) || (device == GameInput.Device.Keyboard && !useKeyboard))
-                        {
-                            inputState.flags = (GameInput.InputStateFlags)0U;
-                            if ((InputStates[i].flags & GameInput.InputStateFlags.Held) > (GameInput.InputStateFlags)0U)
-                            {
-                                inputState.flags |= GameInput.InputStateFlags.Up;
-                            }
-                        }
-                        InputStates[i] = inputState;
-                    }
-
-                    /*GameInput.InputState[] InputStates = Traverse.Create(___instance).Field("inputStates").GetValue() as GameInput.InputState[];
                     List<GameInput.Input> inputs = Traverse.Create(___instance).Field("inputs").GetValue() as List<GameInput.Input>;
                     bool controllerEnabled = (bool)Traverse.Create(___instance).Field("controllerEnabled").GetValue();
                     GameInput.Device lastDevice = (GameInput.Device)Traverse.Create(___instance).Field("lastDevice").GetValue();
                     float[] axisValues = Traverse.Create(___instance).Field("axisValues").GetValue() as float[];
                     int[] lastInputPressed = Traverse.Create(___instance).Field("lastInputPressed").GetValue() as int[];
-                    useKeyboard = false;
+                    //  useKeyboard = false;
+                    
                     XRInputManager xrInput = GetXRInputManager();
 
                     if (!xrInput.hasControllers())
@@ -359,6 +302,7 @@ namespace VRTweaks
                     }
 
                     float unscaledTime = Time.unscaledTime;
+
                     for (int i = 0; i < inputs.Count; i++)
                     {
                         GameInput.InputState inputState = default;
@@ -420,7 +364,7 @@ namespace VRTweaks
                                 inputState.flags |= GameInput.InputStateFlags.Up;
                             }
                         }
-
+                        /*
                         if ((inputState.flags & GameInput.InputStateFlags.Down) != 0U)
                         {
                             int lastIndex = lastInputPressed[(int)device];
@@ -452,7 +396,7 @@ namespace VRTweaks
 
                     return false;
                 }
-            }*//*
+            }
         }
     }*/
 }
