@@ -20,7 +20,6 @@ namespace UWEXR
 
 		public static void Recenter()
 		{
-			Trace.TraceInformation("Recentered that bitch");
 			UXR.InputTracking.Recenter();
 		}
 

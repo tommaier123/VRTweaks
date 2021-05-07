@@ -98,11 +98,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VRAnimationsFixer.cs" />
+    <Compile Include="CraftingMenuFixer.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GazeCursor.cs" />
     <Compile Include="SnapTurn\Config.cs" />
     <Compile Include="SnapTurn\SnapTurning.cs" />
+    <Compile Include="HUDFixer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mod.json">
@@ -110,4 +112,7 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)bin\Debug\VRTweaks.dll" "$(CommonDir)SubnauticaZero\QMods\VRTweaks"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
