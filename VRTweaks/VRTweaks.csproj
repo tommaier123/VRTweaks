@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VolumeCloudPatches.cs" />
     <Compile Include="VRAnimationsFixer.cs" />
     <Compile Include="CraftingMenuFixer.cs" />
     <Compile Include="Main.cs" />
