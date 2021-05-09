@@ -84,6 +84,7 @@ namespace VRTweaks.SnapTurn
         public static void Postfix(MainCameraControl __instance, Vector3 __state)
         {
             __instance.viewModel.transform.localPosition = __state;
+
         }
     }
 }

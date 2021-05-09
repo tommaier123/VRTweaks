@@ -13,6 +13,7 @@ using SMLHelper.V2.Handlers;
 using UWE;
 using System.Collections;
 using System.Linq;
+using UnityEngine.PostProcessing;
 
 namespace VRTweaks
 {
@@ -58,7 +59,6 @@ namespace VRTweaks
             yield return new WaitForSeconds(1);
 
             Recenter();
-           // FixSkinnedMeshRenderer();
             RemoveComponents();
             yield break;
         }
@@ -75,8 +75,11 @@ namespace VRTweaks
             {
                 RemoveComponents();
             }
-            FixSkinnedMeshRenderer();
-            FixMeshRenderer();
+            if(Input.GetKeyDown(KeyCode.RightAlt))
+            {
+                Test();
+            }
+           // Test();
         }
 
         public static void Recenter()
@@ -96,52 +99,29 @@ namespace VRTweaks
                 return;
             }
         }
-        public static void FixSkinnedMeshRenderer()
-        {
-            foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
-            {
-                foreach (SkinnedMeshRenderer r in m.GetAllComponentsInChildren<SkinnedMeshRenderer>())
-                {
-                    foreach (Material mat in r.materials)
-                    {
-                        foreach (var shaderkeys in mat.shaderKeywords)
-                        {
-                            if (shaderkeys.Contains("WBOIT"))
-                            {
-                                mat.DisableKeyword("WBOIT");
-                                File.AppendAllText("VRTweaksLog.txt",mat.name + " WBOIT Shader Keyword Disabled" + Environment.NewLine);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        public static void FixMeshRenderer()
-        {
-           
-            foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
-            {
-                foreach (MeshRenderer r in m.GetAllComponentsInChildren<MeshRenderer>())
-                {
-                    foreach (Material mat in r.materials)
-                    {
-                        if (mat.shaderKeywords.Where(x => x.Equals("WBOIT")).Count() > 0)
-                        {
-                            bool usernameExists = File.ReadAllText("Logs/mats2.txt").Contains(mat.name);
-                            if (!usernameExists)
-                            {
-                                File.AppendAllText("Logs/mats2.txt", "Name: " + mat.name + " , ShaderName: " + mat.name + " , ShaderKeys: " + String.Join(", ", mat.shaderKeywords) + ", WBOITEnabled: " + String.Join(", ", mat.GetShaderPassEnabled("FX/WBOIT") + Environment.NewLine));
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
+        public static void Test()
+        {
+            FindObjectsOfType<TrailRenderer>()?.ForEach((SMR) =>
+            {
+                File.AppendAllText("Logs/GR.txt", "SR: " + SMR.name + Environment.NewLine);
+            //    foreach (Material mat in SMR.lineMaterial)
+               // {
+                    //if (mat.IsKeywordEnabled("WBOIT"))
+                  //  {
+
+                            //File.AppendAllText("Logs/mats2.txt", "Name: " + SMR.name + " , ShaderKeys: " + String.Join(", ", SMR.lineMaterial.shaderKeywords)  + Environment.NewLine);
+                         //   mat.DisableKeyword("WBOIT");// = false;
+                            //FindObjectsOfType<WBOIT>()?.ForEach((wb) => wb.enabled = false);
+                  //  }
+              //  }
+                
+            });
+        }
         public static void RemoveComponents()
         {
-            //FixSkinnedMeshRenderer();
-            FindObjectsOfType<WBOIT>()?.ForEach((w) => w.enabled = false);
+           // FindObjectsOfType<WBOIT>()?.ForEach((wb) => wb.enabled = false);
+            // UwePostProcessingManager volume = gameObject.GetComponent<UwePostProcessingManager.>();
             FindObjectsOfType<PlayerMask>()?.ForEach((m) =>
             {
                 m.enabled = false;

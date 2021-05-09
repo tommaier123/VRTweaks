@@ -47,6 +47,9 @@
       <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\BepInEx\core\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="QModInstaller">
       <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\BepInEx\plugins\QModManager\QModInstaller.dll</HintPath>
       <Private>False</Private>
@@ -102,6 +105,9 @@
     <Reference Include="UnityEngine.UIModule">
       <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.VFXModule">
+      <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.VFXModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.VRModule">
       <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.VRModule.dll</HintPath>
       <Private>False</Private>
@@ -112,6 +118,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WBOITFixes.cs" />
+    <Compile Include="VolumeCloudPatches.cs" />
     <Compile Include="VrAnimationFix.cs" />
     <Compile Include="CraftingMenuFixer.cs" />
     <Compile Include="Fixes\gazeLayerFix.cs" />
