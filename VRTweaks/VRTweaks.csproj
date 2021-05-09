@@ -124,11 +124,9 @@
     <Compile Include="VolumeCloudPatches.cs" />
     <Compile Include="VRAnimationsFixer.cs" />
     <Compile Include="CraftingMenuFixer.cs" />
-    <Compile Include="Fixes\gazeLayerFix.cs" />
     <Compile Include="HUDFixer.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SnapTurn\Config.cs" />
     <Compile Include="SnapTurn\SnapTurning.cs" />
   </ItemGroup>
   <ItemGroup>
