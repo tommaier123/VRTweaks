@@ -9,7 +9,6 @@ using UnityEngine.Events;
 using UnityEngine.XR;
 using VRTweaks.SnapTurn;
 using System.Reflection;
-using SMLHelper.V2.Handlers;
 using UWE;
 using System.Collections;
 
@@ -23,10 +22,10 @@ namespace VRTweaks
         {
             File.AppendAllText("VRTweaksLog.txt", "Initializing" + Environment.NewLine);
 
-            OptionsPanelHandler.RegisterModOptions<Config>();
             new GameObject("_VRTweaks").AddComponent<VRTweaks>();
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly() ,"VRTweaks");
 
+            SnapTurningMenu.Patch();
 
             File.AppendAllText("VRTweaksLog.txt", "Done Initializing" + Environment.NewLine);
         }

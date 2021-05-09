@@ -52,10 +52,6 @@
       <HintPath>$(CommonDir)SubnauticaZero\BepInEx\plugins\QModManager\QModInstaller.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SMLHelper">
-      <HintPath>$(CommonDir)SubnauticaZero\QMods\SMLHelper_BZ\SMLHelper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,11 +95,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="VolumeCloudPatches.cs" />
+    <Compile Include="SnapTurn\SnapTurningMenu.cs" />
+    <Compile Include="SnapTurn\SnapTurningOptions.cs" />
     <Compile Include="VRAnimationsFixer.cs" />
     <Compile Include="CraftingMenuFixer.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SnapTurn\Config.cs" />
     <Compile Include="SnapTurn\SnapTurning.cs" />
     <Compile Include="HUDFixer.cs" />
   </ItemGroup>
