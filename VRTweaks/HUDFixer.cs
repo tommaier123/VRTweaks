@@ -15,14 +15,4 @@ namespace VRTweaks
 
         }
     }
-
-    /*[HarmonyPatch(typeof(Subtitles), "Update")]
-    public static class MessageFixer
-    {
-        [HarmonyPostfix]
-        public static void Postfix(Subtitles __instance)
-        {
-            __instance.transform.parent.localPosition = new Vector3(-537.6f, -432.5f, 0.0f);
-        }
-    }*/
 }

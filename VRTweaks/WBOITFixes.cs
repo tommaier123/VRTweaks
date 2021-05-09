@@ -1,7 +1,4 @@
 ﻿using HarmonyLib;
-using System;
-using System.IO;
-using System.Reflection;
 using UnityEngine;
 
 namespace VRTweaks

@@ -1,4 +1,4 @@
-﻿using BepInEx;
+﻿/*using BepInEx;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
@@ -39,4 +39,4 @@ public static class Patcher
             target.MainModule.ExportedTypes.Add(new ExportedType(t.Namespace, t.Name, t.Module, t.Scope));
         }
     }
-}
+}*/

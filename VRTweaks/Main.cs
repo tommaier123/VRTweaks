@@ -9,11 +9,8 @@ using UnityEngine.Events;
 using UnityEngine.XR;
 using VRTweaks.SnapTurn;
 using System.Reflection;
-using SMLHelper.V2.Handlers;
 using UWE;
 using System.Collections;
-using System.Linq;
-using UnityEngine.PostProcessing;
 
 namespace VRTweaks
 {
@@ -25,10 +22,10 @@ namespace VRTweaks
         {
             File.AppendAllText("VRTweaksLog.txt", "Initializing" + Environment.NewLine);
 
-            OptionsPanelHandler.RegisterModOptions<Config>();
             new GameObject("_VRTweaks").AddComponent<VRTweaks>();
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), "VRTweaks");
 
+            SnapTurningMenu.Patch();
 
             File.AppendAllText("VRTweaksLog.txt", "Done Initializing" + Environment.NewLine);
         }
@@ -75,11 +72,6 @@ namespace VRTweaks
             {
                 RemoveComponents();
             }
-            if(Input.GetKeyDown(KeyCode.RightAlt))
-            {
-                Test();
-            }
-           // Test();
         }
 
         public static void Recenter()
@@ -100,28 +92,9 @@ namespace VRTweaks
             }
         }
 
-        public static void Test()
-        {
-            FindObjectsOfType<TrailRenderer>()?.ForEach((SMR) =>
-            {
-                File.AppendAllText("Logs/GR.txt", "SR: " + SMR.name + Environment.NewLine);
-            //    foreach (Material mat in SMR.lineMaterial)
-               // {
-                    //if (mat.IsKeywordEnabled("WBOIT"))
-                  //  {
-
-                            //File.AppendAllText("Logs/mats2.txt", "Name: " + SMR.name + " , ShaderKeys: " + String.Join(", ", SMR.lineMaterial.shaderKeywords)  + Environment.NewLine);
-                         //   mat.DisableKeyword("WBOIT");// = false;
-                            //FindObjectsOfType<WBOIT>()?.ForEach((wb) => wb.enabled = false);
-                  //  }
-              //  }
-                
-            });
-        }
         public static void RemoveComponents()
         {
-           // FindObjectsOfType<WBOIT>()?.ForEach((wb) => wb.enabled = false);
-            // UwePostProcessingManager volume = gameObject.GetComponent<UwePostProcessingManager.>();
+
             FindObjectsOfType<PlayerMask>()?.ForEach((m) =>
             {
                 m.enabled = false;
@@ -130,28 +103,33 @@ namespace VRTweaks
             });
 
             /*
-          foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
-          {
-              if (m.name.Equals("airsack_fish_geo"))
-              {
-                  foreach (SkinnedMeshRenderer r in m.GetAllComponentsInChildren<SkinnedMeshRenderer>())
-                  {
-                      foreach (Material mat in r.materials)
-                      {
-                          if (mat.shaderKeywords.Where(x => x.Equals("WBOIT")).Count() > 0)
-                          {
-                              mat.DisableKeyword("WBOIT");
-                              File.AppendAllText("VRTweaksLog.txt", "Shader Keyword Disabled" + Environment.NewLine);
-                          }
-                      }
-                  }
-              }
-          }
+            foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
+            {
+                if (m.name.Equals("airsack_fish_geo"))
+                {
+                    foreach (SkinnedMeshRenderer r in m.GetAllComponentsInChildren<SkinnedMeshRenderer>())
+                    {
+                        foreach (Material mat in r.materials)
+                        {
+                            if (mat.shaderKeywords.Where(x => x.Equals("WBOIT")).Count() > 0)
+                            {
+                                mat.DisableKeyword("WBOIT");
+                                File.AppendAllText("VRTweaksLog.txt", "Shader Keyword Disabled" + Environment.NewLine);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            foreach (Material m in FindObjectsOfType(typeof(Material)) as Material[])
+            {
+                m.DisableKeyword("WBOIT");
+                File.AppendAllText("VRTweaksLog.txt", m.name + " " + String.Join(", ", m.shaderKeywords) + Environment.NewLine);
+            }
+            
+            Shader.DisableKeyword("WBOIT");
             */
-
-            // Shader.DisableKeyword("WBOIT");
-
         }
+
     }
 }
-

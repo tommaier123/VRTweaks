@@ -19,28 +19,4 @@ namespace VRTweaks
             return true;
         }
     }
-
-   /* [HarmonyPatch(typeof(HandReticle), "LateUpdate")]
-    public static class HandRectilePostifix
-    {
-        [HarmonyPrefix]
-        public static bool Prefix(HandReticle __instance)
-        {
-            if (__instance.transform.position != null)
-            {
-                float x = InputTracking.GetLocalPosition(XRNode.RightHand).x;
-                float y = InputTracking.GetLocalPosition(XRNode.RightHand).y;
-                float z = InputTracking.GetLocalPosition(XRNode.RightHand).z;
-
-                //float X = VRHandsController.rightController.transform.position.x;
-               // float Y = VRHandsController.rightController.transform.position.y;
-               // float Z = VRHandsController.rightController.transform.position.z;
-                //  __instance.transform.position = new Vector3(X, Y, Z + 0.5f);
-                __instance.transform.position = new Vector3(x, y, z + 0.5f);
-                //   __instance.transform.position = new Vector3(InputTracking.GetLocalPosition(XRNode.RightHand).x, InputTracking.GetLocalPosition(XRNode.RightHand).y,InputTracking.GetLocalPosition(XRNode.RightHand).z).normalized;
-              
-            }
-            return true;
-        }
-    }*/
 }
