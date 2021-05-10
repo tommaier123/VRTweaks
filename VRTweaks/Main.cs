@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using HarmonyLib;
 using QModManager.API.ModLoading;
@@ -7,10 +6,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.XR;
-using VRTweaks.SnapTurn;
 using System.Reflection;
 using UWE;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace VRTweaks
 {
@@ -18,7 +17,6 @@ namespace VRTweaks
     [QModCore]
     public static class Loader
     {
-
         [QModPatch]
         public static void Initialize()
         {
@@ -35,8 +33,6 @@ namespace VRTweaks
 
     public class VRTweaks : MonoBehaviour
     {
-        //private static VRTweaks s_instance;
-
         public VRTweaks()
         {
             DontDestroyOnLoad(gameObject);
@@ -73,7 +69,7 @@ namespace VRTweaks
             if (XRSettings.loadedDeviceName == "Oculus")
             {
                 File.AppendAllText("VRTweaksLog.txt", "Recentering Oculus" + Environment.NewLine);
-                InputTracking.Recenter();
+                OVRManager.display.RecenterPose();
                 return;
             }
 
