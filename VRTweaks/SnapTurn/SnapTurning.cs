@@ -1,34 +1,26 @@
 ﻿using HarmonyLib;
-using SMLHelper.V2.Handlers;
-using SMLHelper.V2.Utility;
 using UnityEngine;
 using UnityEngine.XR;
 
 namespace VRTweaks.SnapTurn
 {
-    [HarmonyPatch(typeof(MainCameraControl))]
-    [HarmonyPatch("Update")]
+    [HarmonyPatch(typeof(MainCameraControl), "Update")]
     public static class SnapTurning
     {
-        private static float SnapAngle => Config.SnapAngles[Config.SnapAngleChoiceIndex];
+        private static float SnapAngle => SnapTurningOptions.SnapAngles[SnapTurningOptions.SnapAngleChoiceIndex];
         private static bool _didLookRight;
         private static bool _didLookLeft;
-        private static bool _isLookingLeft;
-        private static bool _isLookingRight;
         private static bool _isLookingUpOrDown;
         private static bool _isLookingLeftOrRight;
         private static bool _shouldSnapTurn;
 
-        public static void Initialize()
-        {
-            Config.Load();
-            OptionsPanelHandler.RegisterModOptions(new OptionsMenu());
-        }
 
         [HarmonyPrefix]
-        public static bool Prefix()
+        public static bool Prefix(MainCameraControl __instance, out Vector3 __state)
         {
-            if (!Config.EnableSnapTurning)
+            __state = __instance.viewModel.transform.localPosition;
+
+            if (!SnapTurningOptions.EnableSnapTurning || Player.main.isPiloting)
             {
                 return true; //Enter vanilla method
             }
@@ -51,16 +43,15 @@ namespace VRTweaks.SnapTurn
 
         private static void UpdateFields()
         {
-            _didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight) || KeyCodeUtils.GetKeyDown(Config.KeybindKeyRight);
-            _didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft) || KeyCodeUtils.GetKeyDown(Config.KeybindKeyLeft);
-            _isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight) || KeyCodeUtils.GetKeyHeld(Config.KeybindKeyRight);
-            _isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft) || KeyCodeUtils.GetKeyHeld(Config.KeybindKeyLeft);
-            _isLookingLeftOrRight = _didLookLeft || _didLookRight || _isLookingLeft || _isLookingRight;
+            var lookDelta = GameInput.GetLookDelta();
+
+            _isLookingUpOrDown = Mathf.Abs(lookDelta.y) > Mathf.Abs(lookDelta.x);
+            _isLookingLeftOrRight = Mathf.Abs(lookDelta.x) > Mathf.Abs(lookDelta.y);
+
+            _didLookRight = !_isLookingUpOrDown && (GameInput.GetButtonDown(GameInput.Button.LookRight) || GameInput.GetKeyDown(SnapTurningOptions.KeybindKeyRight));
+            _didLookLeft = !_isLookingUpOrDown && (GameInput.GetButtonDown(GameInput.Button.LookLeft) || GameInput.GetKeyDown(SnapTurningOptions.KeybindKeyLeft));
+
             _shouldSnapTurn = XRSettings.enabled && _isLookingLeftOrRight;
-            _isLookingUpOrDown = GameInput.GetButtonDown(GameInput.Button.LookUp)
-                || GameInput.GetButtonDown(GameInput.Button.LookDown)
-                || GameInput.GetButtonHeld(GameInput.Button.LookUp)
-                || GameInput.GetButtonHeld(GameInput.Button.LookDown);
         }
 
         private static void UpdatePlayerRotation()
@@ -82,6 +73,12 @@ namespace VRTweaks.SnapTurn
             }
 
             return newEulerAngles;
+        }
+
+        [HarmonyPostfix]
+        public static void Postfix(MainCameraControl __instance, Vector3 __state)
+        {
+            __instance.viewModel.transform.localPosition = __state;
         }
     }
 }

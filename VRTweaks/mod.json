@@ -2,7 +2,7 @@
   "Id": "VRTweaks",
   "DisplayName": "VRTweaks",
   "Author": "Nova_Max",
-  "Version": "1.0",
+  "Version": "1.1",
   "Enable": true,
   "Game": "BelowZero",
   "AssemblyName": "VRTweaks.dll"
