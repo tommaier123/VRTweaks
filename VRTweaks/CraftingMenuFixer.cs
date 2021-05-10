@@ -7,7 +7,6 @@ using UWE;
 
 namespace VRTweaks
 {
-
     [HarmonyPatch(typeof(uGUI_CraftingMenu), "Open")]
     public static class CraftingMenuFixer
     {

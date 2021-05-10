@@ -23,7 +23,7 @@ namespace VRTweaks
          [HarmonyPrefix]
          public static bool Prefix(Subtitles __instance)
          {
-             __instance.transform.parent.localPosition = new Vector3(-447.6f, -432.5f, 0.0f);
+             __instance.transform.parent.localPosition = new Vector3(-457.6f, -432.5f, 0.0f);
              return true;
          }
      }

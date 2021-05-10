@@ -56,14 +56,12 @@ namespace VRTweaks
         private static IEnumerator RemoveNRecenter()
         {
             yield return new WaitForSeconds(1);
-
             Recenter();
             yield break;
         }
 
         internal void Update()
         {
-
             if (Input.GetKeyDown(KeyCode.T))
             {
                 Recenter();
