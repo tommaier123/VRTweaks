@@ -14,9 +14,11 @@ using System.Collections;
 
 namespace VRTweaks
 {
+
     [QModCore]
     public static class Loader
     {
+
         [QModPatch]
         public static void Initialize()
         {
@@ -56,7 +58,6 @@ namespace VRTweaks
             yield return new WaitForSeconds(1);
 
             Recenter();
-            RemoveComponents();
             yield break;
         }
 
@@ -66,11 +67,6 @@ namespace VRTweaks
             if (Input.GetKeyDown(KeyCode.T))
             {
                 Recenter();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                RemoveComponents();
             }
         }
 
@@ -91,45 +87,5 @@ namespace VRTweaks
                 return;
             }
         }
-
-        public static void RemoveComponents()
-        {
-
-            FindObjectsOfType<PlayerMask>()?.ForEach((m) =>
-            {
-                m.enabled = false;
-                m.gameObject.SetActive(false);
-                m.GetAllComponentsInChildren<MeshFilter>()?.ForEach((f) => f.mesh = null);
-            });
-
-            /*
-            foreach (GameObject m in FindObjectsOfType(typeof(GameObject)) as GameObject[])
-            {
-                if (m.name.Equals("airsack_fish_geo"))
-                {
-                    foreach (SkinnedMeshRenderer r in m.GetAllComponentsInChildren<SkinnedMeshRenderer>())
-                    {
-                        foreach (Material mat in r.materials)
-                        {
-                            if (mat.shaderKeywords.Where(x => x.Equals("WBOIT")).Count() > 0)
-                            {
-                                mat.DisableKeyword("WBOIT");
-                                File.AppendAllText("VRTweaksLog.txt", "Shader Keyword Disabled" + Environment.NewLine);
-                            }
-                        }
-                    }
-                }
-            }
-            
-            foreach (Material m in FindObjectsOfType(typeof(Material)) as Material[])
-            {
-                m.DisableKeyword("WBOIT");
-                File.AppendAllText("VRTweaksLog.txt", m.name + " " + String.Join(", ", m.shaderKeywords) + Environment.NewLine);
-            }
-            
-            Shader.DisableKeyword("WBOIT");
-            */
-        }
-
     }
 }
