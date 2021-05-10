@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 namespace VRTweaks.Fixes
 {
-    //Taken From VrEnhanchment Mod
-    //It fixes the layer issue on the menu but only works with mouse and keyboard playing
+    //It fixes the layer issue on the menu but only works with mouse and keyboard while in game
     class gazeLayerFix
     {
         public static bool actualGazedBasedCursor;
