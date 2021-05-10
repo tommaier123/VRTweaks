@@ -108,6 +108,7 @@
     <Compile Include="SnapTurn\SnapTurning.cs" />
     <Compile Include="HUDFixer.cs" />
     <Compile Include="WBOITFixes.cs" />
+    <Compile Include="XRInputManager%28WIP%29.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mod.json">
