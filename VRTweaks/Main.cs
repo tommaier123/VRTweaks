@@ -62,11 +62,6 @@ namespace VRTweaks
             {
                 Recenter();
             }
-
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                RemoveComponents();
-            }
         }
 
         public static void Recenter()

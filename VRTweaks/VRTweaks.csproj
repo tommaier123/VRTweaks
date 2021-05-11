@@ -84,6 +84,9 @@
       <HintPath>$(CommonDir)SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(CommonDir)\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.VRModule">
       <HintPath>$(CommonDir)SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.VRModule.dll</HintPath>
       <Private>False</Private>
@@ -94,6 +97,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BubblesSubtitleFixer.cs" />
+    <Compile Include="GazeLayerFix.cs" />
     <Compile Include="VolumeCloudPatches.cs" />
     <Compile Include="SnapTurn\SnapTurningMenu.cs" />
     <Compile Include="SnapTurn\SnapTurningOptions.cs" />
@@ -103,6 +108,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnapTurn\SnapTurning.cs" />
     <Compile Include="HUDFixer.cs" />
+    <Compile Include="WBOITFixes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mod.json">
