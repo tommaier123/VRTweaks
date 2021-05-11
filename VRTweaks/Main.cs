@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using HarmonyLib;
 using QModManager.API.ModLoading;
@@ -7,13 +6,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.XR;
-using VRTweaks.SnapTurn;
 using System.Reflection;
 using UWE;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace VRTweaks
 {
+
     [QModCore]
     public static class Loader
     {
@@ -33,8 +33,6 @@ namespace VRTweaks
 
     public class VRTweaks : MonoBehaviour
     {
-        //private static VRTweaks s_instance;
-
         public VRTweaks()
         {
             DontDestroyOnLoad(gameObject);
@@ -54,23 +52,15 @@ namespace VRTweaks
         private static IEnumerator RemoveNRecenter()
         {
             yield return new WaitForSeconds(1);
-
             Recenter();
-            RemoveComponents();
             yield break;
         }
 
         internal void Update()
         {
-
             if (Input.GetKeyDown(KeyCode.T))
             {
                 Recenter();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                RemoveComponents();
             }
         }
 
@@ -79,7 +69,7 @@ namespace VRTweaks
             if (XRSettings.loadedDeviceName == "Oculus")
             {
                 File.AppendAllText("VRTweaksLog.txt", "Recentering Oculus" + Environment.NewLine);
-                InputTracking.Recenter();
+                OVRManager.display.RecenterPose();
                 return;
             }
 
@@ -91,6 +81,7 @@ namespace VRTweaks
                 return;
             }
         }
+
 
         public static void RemoveComponents()
         {
@@ -130,6 +121,5 @@ namespace VRTweaks
             Shader.DisableKeyword("WBOIT");
             */
         }
-
     }
 }
