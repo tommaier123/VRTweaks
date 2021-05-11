@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -23,15 +23,16 @@ namespace VRTweaks
             int texAPropertyID = (int)Traverse.Create(__instance).Field("texAPropertyID").GetValue();
             int texBPropertyID = (int)Traverse.Create(__instance).Field("texBPropertyID").GetValue();
 
-            wboitTexture0 = new RenderTexture(camera.pixelWidth, camera.pixelHeight, 24, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear);
+            wboitTexture0 = new RenderTexture(camera.pixelWidth, camera.pixelHeight, 24, RenderTextureFormat.DefaultHDR, RenderTextureReadWrite.Linear);
             wboitTexture0.name = "WBOIT Tex0";
             Traverse.Create(__instance).Field("wboitTexture0").SetValue(wboitTexture0);
 
-            wboitTexture1 = new RenderTexture(camera.pixelWidth, camera.pixelHeight, 24, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear);
+            wboitTexture1 = new RenderTexture(camera.pixelWidth, camera.pixelHeight, 24, RenderTextureFormat.DefaultHDR, RenderTextureReadWrite.Linear);
             wboitTexture1.name = "WBOIT TexA";
             Traverse.Create(__instance).Field("wboitTexture1").SetValue(wboitTexture1);
 
-            wboitTexture2 = new RenderTexture(camera.pixelWidth, camera.pixelHeight, 0, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear);
+            wboitTexture2 = new RenderTexture(camera.pixelWidth, camera.pixelHeight, 0, RenderTextureFormat.DefaultHDR, RenderTextureReadWrite.Linear);
+
             wboitTexture2.name = "WBOIT TexB";
             Traverse.Create(__instance).Field("wboitTexture2").SetValue(wboitTexture2);
 
