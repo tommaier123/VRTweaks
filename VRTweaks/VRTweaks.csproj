@@ -116,6 +116,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)bin\Debug\VRTweaks.dll" "H:\Steam Games SSD\steamapps\common\SubnauticaZero\QMods\VRTweaks"</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)bin\Debug\VRTweaks.dll" "$(CommonDir)SubnauticaZero\QMods\VRTweaks"</PostBuildEvent>
   </PropertyGroup>
 </Project>

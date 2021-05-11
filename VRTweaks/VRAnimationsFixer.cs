@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using UnityEngine;
 
 namespace VRTweaks
 {
@@ -13,4 +14,3 @@ namespace VRTweaks
         }
     }
 }
-
