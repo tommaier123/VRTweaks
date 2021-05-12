@@ -253,7 +253,7 @@ namespace ImmersiveVR
                 return false;
             }
         }
-
+        //Need to find out when this is enabled why Joystick axis do not work correctly.
        /* [HarmonyPatch(typeof(GameInput), "UpdateKeyInputs")]
         internal class UpdateKeyInputsPatch
         {
