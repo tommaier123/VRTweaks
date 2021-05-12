@@ -59,6 +59,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -97,7 +100,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BubblesSubtitleFixer.cs" />
+    <Compile Include="Controls\VRHandsController.cs" />
+    <Compile Include="Controls\XRInputManager.cs" />
     <Compile Include="GazeLayerFix.cs" />
+    <Compile Include="RecenterVRButtonAdder.cs" />
     <Compile Include="VolumeCloudPatches.cs" />
     <Compile Include="SnapTurn\SnapTurningMenu.cs" />
     <Compile Include="SnapTurn\SnapTurningOptions.cs" />
@@ -108,7 +114,6 @@
     <Compile Include="SnapTurn\SnapTurning.cs" />
     <Compile Include="HUDFixer.cs" />
     <Compile Include="WBOITFixes.cs" />
-    <Compile Include="XRInputManager%28WIP%29.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mod.json">
