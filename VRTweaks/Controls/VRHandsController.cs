@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
 using RootMotion.FinalIK;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.XR;
+using Valve.VR;
 
 namespace VRTweaks
 {
@@ -59,25 +59,77 @@ namespace VRTweaks
 
         public void UpdateHandPositions()
         {
+
             InventoryItem heldItem = Inventory.main.quickSlots.heldItem;
 
-            rightController.transform.localPosition = InputTracking.GetLocalPosition(XRNode.RightHand) + new Vector3(0f, -0.13f, -0.14f);
-            rightController.transform.localRotation = InputTracking.GetLocalRotation(XRNode.RightHand) * Quaternion.Euler(35f, 190f, 270f);
+            if (XRInputManager.GetXRInputManager().rightController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 rightPos) && XRInputManager.GetXRInputManager().rightController.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion rightRot))
+            {
 
-            leftController.transform.localPosition = InputTracking.GetLocalPosition(XRNode.LeftHand) + new Vector3(0f, -0.13f, -0.14f);
-            leftController.transform.localRotation = InputTracking.GetLocalRotation(XRNode.LeftHand) * Quaternion.Euler(270f, 90f, 0f);
+                rightController.transform.localPosition = rightPos + new Vector3(0f, -0.13f, -0.14f);
+                rightController.transform.localRotation = rightRot * Quaternion.Euler(35f, 190f, 270f);
+            }
+
+            if (XRInputManager.GetXRInputManager().leftController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 leftPos) && XRInputManager.GetXRInputManager().leftController.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion leftRot))
+            {
+
+                leftController.transform.localPosition = leftPos + new Vector3(0f, -0.13f, -0.14f);
+                leftController.transform.localRotation = leftRot * Quaternion.Euler(270f, 90f, 0f);
+            }
 
             if (pda.isActiveAndEnabled)
             {
+
                 ik.solver.leftHandEffector.target = leftController.transform;
                 ik.solver.rightHandEffector.target = null;
             }
-            else
+
+            if (heldItem != null)
             {
-                ik.solver.leftHandEffector.target = null;
-                ik.solver.rightHandEffector.target = null;
+                if (heldItem.item.GetComponent<FlashLight>())
+                {
+
+                    ik.solver.leftHandEffector.target = null;
+                    ik.solver.rightHandEffector.target = rightController.transform;
+                }
             }
+            /* if (XRInputManager.GetXRInputManager().rightController.TryGetFeatureUsages(inputFeatures))
+             {
+                 foreach (var feature in inputFeatures)
+                 {
+                     if (feature.type == typeof(bool))
+                     {
+                         bool featureValue;
+                         if (XRInputManager.GetXRInputManager().rightController.TryGetFeatureValue(feature.As<bool>(), out featureValue))
+                         {
+                             if (!File.ReadAllText("Logs/Right.txt").Contains(feature.name))
+                             {
+                                 File.AppendAllText("Logs/Right.txt", "Bool Feature: " + feature.name + " , Value: " + feature.ToString() + " , Type" + feature.type + Environment.NewLine);
+                                 //Debug.Log(string.Format("Right Bool feature {0}'s value is {1}", feature.name, featureValue.ToString()));
+                             }
+                         }
+                     }
+                 }
+             }
+             if (XRInputManager.GetXRInputManager().leftController.TryGetFeatureUsages(inputFeatures))
+             {
+                 foreach (var feature in inputFeatures)
+                 {
+                     if (feature.type == typeof(bool))
+                     {
+                         bool featureValue;
+                         if (XRInputManager.GetXRInputManager().leftController.TryGetFeatureValue(feature.As<bool>(), out featureValue))
+                         {
+                             if (!File.ReadAllText("Logs/Left.txt").Contains(feature.name))
+                             {
+                                 File.AppendAllText("Logs/Left.txt", "Bool Feature: " + feature.name + " , Value: " + feature.ToString() + " , Type" + feature.type + Environment.NewLine);
+                                 //Debug.Log(string.Format("Left Bool feature {0}'s value is {1}", feature.name, featureValue.ToString()));
+                             }
+                         }
+                     }
+                 }
+             }*/
         }
+
 
         [HarmonyPatch(typeof(ArmsController))]
         [HarmonyPatch("Start")]
@@ -91,7 +143,7 @@ namespace VRTweaks
                     return;
                 }
 
-                VRHandsController.main.Initialize(__instance);
+                main.Initialize(__instance);
             }
         }
 
@@ -111,14 +163,23 @@ namespace VRTweaks
                 PDA pda = VRHandsController.pda;
                 Player player = Player.main;
 
-                if ((Player.main.motorMode != Player.MotorMode.Vehicle && !player.cinematicModeActive))
+                if ((/*(Player.main.motorMode != Player.MotorMode.Vehicle &&*/ !player.cinematicModeActive))
                 {
                     main.UpdateHandPositions();
                 }
             }
         }
 
+        /*        [HarmonyPatch(typeof(GameInput))]
+                [HarmonyPatch("Reconfigure")]
+                class SetupDefaultControllerBindings_Patch
+                {
+                    [HarmonyPrefix]
+                    public static void Prefix(GameInput __instance)
+                    {
 
+                    }
+                }*/
         [HarmonyPatch(typeof(ArmsController))]
         [HarmonyPatch("Reconfigure")]
         class ArmsController_Reconfigure_Patch
@@ -156,7 +217,6 @@ namespace VRTweaks
                 }
 
             }
-
         }
     }
 }
