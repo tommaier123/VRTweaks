@@ -67,6 +67,9 @@
       <HintPath>$(CommonDir)SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(CommonDir)SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(CommonDir)SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
@@ -100,6 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioFixes.cs" />
     <Compile Include="BubblesSubtitleFixer.cs" />
     <Compile Include="CameraPositionFixes.cs" />
     <Compile Include="GazeLayerFix.cs" />
