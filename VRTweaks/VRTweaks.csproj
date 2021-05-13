@@ -117,6 +117,7 @@
     <Compile Include="SnapTurn\SnapTurning.cs" />
     <Compile Include="HUDFixer.cs" />
     <Compile Include="RecenterVRButtonAdder.cs" />
+    <Compile Include="VRLoadingScreen.cs" />
     <Compile Include="WBOITFixes.cs" />
   </ItemGroup>
   <ItemGroup>
