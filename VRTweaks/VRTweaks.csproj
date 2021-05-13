@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BubblesSubtitleFixer.cs" />
+    <Compile Include="CameraPositionFixes.cs" />
     <Compile Include="GazeLayerFix.cs" />
     <Compile Include="VolumeCloudPatches.cs" />
     <Compile Include="SnapTurn\SnapTurningMenu.cs" />
