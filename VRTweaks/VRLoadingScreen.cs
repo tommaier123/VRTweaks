@@ -21,7 +21,7 @@ namespace VRTweaks
                     GameObject loadingScreen = __instance.loading.gameObject;
                     loadingScreen.transform.SetParent(loadingCanvas.GetComponent<RectTransform>());
                     loadingScreen.GetComponent<RectTransform>().position =
-                        MainCamera.camera.gameObject.transform.parent.position + MainCamera.camera.gameObject.transform.parent.forward * 3f;
+                    MainCamera.camera.gameObject.transform.parent.position + MainCamera.camera.gameObject.transform.parent.forward * 3f;
                     loadingScreen.GetComponent<RectTransform>().LookAt(MainCamera.camera.gameObject.transform.parent);
                     loadingScreen.GetComponent<RectTransform>().Rotate(0f, 180f, 0f);
                 }

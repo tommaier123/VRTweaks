@@ -6,16 +6,20 @@ using Valve.VR;
 
 namespace VRTweaks
 {
+
     public enum ControllerLayout
     {
-        // Token: 0x04003C52 RID: 15442
+        // Token: 0x04005E34 RID: 24116
         Automatic,
-        // Token: 0x04003C53 RID: 15443
+        // Token: 0x04005E35 RID: 24117
         Xbox360,
-        // Token: 0x04003C54 RID: 15444
+        // Token: 0x04005E36 RID: 24118
         XboxOne,
-        // Token: 0x04003C55 RID: 15445
+        // Token: 0x04005E37 RID: 24119
         PS4,
+        // Token: 0x04005E38 RID: 24120
+        Switch,
+        // Token: 0x04006E2F RID: 28207
         OpenVR
     }
     public class VRHandsController : MonoBehaviour
@@ -59,39 +63,36 @@ namespace VRTweaks
 
         public void UpdateHandPositions()
         {
-
             InventoryItem heldItem = Inventory.main.quickSlots.heldItem;
 
             if (XRInputManager.GetXRInputManager().rightController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 rightPos) && XRInputManager.GetXRInputManager().rightController.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion rightRot))
             {
-
                 rightController.transform.localPosition = rightPos + new Vector3(0f, -0.13f, -0.14f);
                 rightController.transform.localRotation = rightRot * Quaternion.Euler(35f, 190f, 270f);
             }
 
             if (XRInputManager.GetXRInputManager().leftController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 leftPos) && XRInputManager.GetXRInputManager().leftController.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion leftRot))
             {
-
                 leftController.transform.localPosition = leftPos + new Vector3(0f, -0.13f, -0.14f);
                 leftController.transform.localRotation = leftRot * Quaternion.Euler(270f, 90f, 0f);
             }
-
+            //is user has pda enabled enable motion support for left hand
             if (pda.isActiveAndEnabled)
             {
-
                 ik.solver.leftHandEffector.target = leftController.transform;
                 ik.solver.rightHandEffector.target = null;
             }
 
             if (heldItem != null)
             {
+                //if player has a flash light in hand enable motion support for right hand
                 if (heldItem.item.GetComponent<FlashLight>())
                 {
-
                     ik.solver.leftHandEffector.target = null;
                     ik.solver.rightHandEffector.target = rightController.transform;
                 }
             }
+            //for getting all the inputs for the right controller
             /* if (XRInputManager.GetXRInputManager().rightController.TryGetFeatureUsages(inputFeatures))
              {
                  foreach (var feature in inputFeatures)
@@ -110,6 +111,7 @@ namespace VRTweaks
                      }
                  }
              }
+            //for getting all the inputs for the left controller
              if (XRInputManager.GetXRInputManager().leftController.TryGetFeatureUsages(inputFeatures))
              {
                  foreach (var feature in inputFeatures)
@@ -129,7 +131,6 @@ namespace VRTweaks
                  }
              }*/
         }
-
 
         [HarmonyPatch(typeof(ArmsController))]
         [HarmonyPatch("Start")]
@@ -151,7 +152,6 @@ namespace VRTweaks
         [HarmonyPatch("Update")]
         class ArmsController_Update_Patch
         {
-
             [HarmonyPostfix]
             public static void Postfix(ArmsController __instance)
             {
@@ -170,16 +170,6 @@ namespace VRTweaks
             }
         }
 
-        /*        [HarmonyPatch(typeof(GameInput))]
-                [HarmonyPatch("Reconfigure")]
-                class SetupDefaultControllerBindings_Patch
-                {
-                    [HarmonyPrefix]
-                    public static void Prefix(GameInput __instance)
-                    {
-
-                    }
-                }*/
         [HarmonyPatch(typeof(ArmsController))]
         [HarmonyPatch("Reconfigure")]
         class ArmsController_Reconfigure_Patch
@@ -198,7 +188,6 @@ namespace VRTweaks
                 ik.solver.leftHandEffector.target = null;
                 ik.solver.rightHandEffector.target = null;
 
-
                 Transform leftWorldTarget = tInstance.Field<Transform>("leftWorldTarget").Value;
 
                 if (leftWorldTarget)
@@ -215,7 +204,6 @@ namespace VRTweaks
                     ik.solver.rightHandEffector.target = rightWorldTarget;
                     return;
                 }
-
             }
         }
     }

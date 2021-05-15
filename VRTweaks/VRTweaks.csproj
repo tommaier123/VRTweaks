@@ -109,6 +109,7 @@
     <Compile Include="Controls\VRHandsController.cs" />
     <Compile Include="Controls\XRInputManager.cs" />
     <Compile Include="GazeLayerFix.cs" />
+    <Compile Include="PDAPositioning.cs" />
     <Compile Include="RecenterVRButtonAdder.cs" />
     <Compile Include="VolumeCloudPatches.cs" />
     <Compile Include="SnapTurn\SnapTurningMenu.cs" />

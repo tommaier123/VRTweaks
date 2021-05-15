@@ -3,7 +3,8 @@ using UnityEngine;
 using UnityEngine.XR;
 using HarmonyLib;
 using System;
-
+using System.IO;
+using Valve.VR;
 namespace VRTweaks
 {
     enum Controller
@@ -16,8 +17,9 @@ namespace VRTweaks
     {
         private static readonly XRInputManager _instance = new XRInputManager();
         private readonly List<InputDevice> xrDevices = new List<InputDevice>();
-        public InputDevice leftController;
-        public InputDevice rightController;
+        public  InputDevice leftController;
+        public  InputDevice rightController;
+
 
         private XRInputManager()
         {
@@ -31,7 +33,9 @@ namespace VRTweaks
 
         void GetDevices()
         {
+            Debug.Log("XrDevices: " + xrDevices);
             InputDevices.GetDevices(xrDevices);
+            
             foreach (InputDevice device in xrDevices)
             {
                 if (device.name.Contains("Left"))
@@ -194,7 +198,6 @@ namespace VRTweaks
                 float[] lastAxisValues = Traverse.Create(___instance).Field("lastAxisValues").GetValue() as float[];
                 GameInput.Device lastDevice = (GameInput.Device)Traverse.Create(___instance).Field("lastDevice").GetValue();
 
-
                 XRInputManager xrInput = GetXRInputManager();
                 if (!xrInput.hasControllers())
                 {
@@ -218,6 +221,8 @@ namespace VRTweaks
                     axisValues[5] = xrInput.Get(Controller.Right, CommonUsages.trigger).CompareTo(0.3f);
                     // Debug.Log("AxisValues6: " + axisValues[6]);
                     // Debug.Log("AxisValues7: " + axisValues[7]);
+                    //axisValues[6] = vector2.x;
+                    //axisValues[7] = -vector2.y;
                 }
                 if (useKeyboard)
                 {
@@ -250,52 +255,46 @@ namespace VRTweaks
                 return false;
             }
         }
-        public static void InitializeMainDevice()
-        {
-            List<InputDevice> allDevices = new List<InputDevice>();
-            InputDevices.GetDevices(allDevices);
 
-            foreach (var inputDevice in allDevices)
+        //Working on a way to auto detect devices
+        /*public static void InitializeMainDevice()
+        {
+            InputDevices.GetDevices(xrDevices);
+            foreach (var inputDevice in xrDevices)
             {
                 if (inputDevice.characteristics.HasFlag(InputDeviceCharacteristics.HeadMounted))
                 {
-                    Debug.Log("found device: " + inputDevice.name);
-                    if (inputDevice.name.Contains("Oculus") || inputDevice.name.Contains("Quest"))
+                    if (inputDevice.manufacturer.Contains("Oculus") || inputDevice.manufacturer.Contains("Quest") && inputDevice.isValid)
                     {
-                        Debug.Log("it is Oculus!");
+                        File.AppendAllText("Logs/VrInput.txt", "I got a Oculus" + Environment.NewLine);
                     }
-                    else if (inputDevice.name.Contains("Vive"))
+                    else if (inputDevice.manufacturer.Contains("Vive") && inputDevice.isValid)
                     {
-                        Debug.Log("it is Vive!");
+                        File.AppendAllText("Logs/VrInput.txt", "I got a Vive" + Environment.NewLine);
                     }
-                    else if (inputDevice.name.Contains("Index"))
+                    else if (inputDevice.manufacturer.Contains("Index") && inputDevice.isValid)
                     {
-                        Debug.Log("it is Index!");
+                        File.AppendAllText("Logs/VrInput.txt", "I got a Index" + Environment.NewLine);
                     }
                 }
-                // Debug.Log("-----NAME: " + inputDevice.name);
-                // Debug.Log("-characteristics: " + inputDevice.characteristics);
-                // Debug.Log("-manufacturer: " + inputDevice.manufacturer);
-                // Debug.Log("-subsystem: " + inputDevice.subsystem);
-                // Debug.Log("-serialNumber: " + inputDevice.serialNumber);
-                // Debug.Log("-isValid: " + inputDevice.isValid);
+
+                File.AppendAllText("Logs/VrInput.txt", "Name: " + inputDevice.name + Environment.NewLine);
+                File.AppendAllText("Logs/VrInput.txt", "Characteristics: " + inputDevice.characteristics + Environment.NewLine);
+                File.AppendAllText("Logs/VrInput.txt", "Manufacturer: " + inputDevice.manufacturer + Environment.NewLine);
+                File.AppendAllText("Logs/VrInput.txt", "Subsystem: " + inputDevice.subsystem + Environment.NewLine);
+                File.AppendAllText("Logs/VrInput.txt", "SerialNumber: " + inputDevice.serialNumber + Environment.NewLine);
+                File.AppendAllText("Logs/VrInput.txt", "isValid: " + inputDevice.isValid + Environment.NewLine);
+                File.AppendAllText("Logs/VrInput.txt", "        " + Environment.NewLine);
             }
-        }
+        }*/
+
         //Need to find out when this is enabled why Joystick axis do not work correctly.
-        [HarmonyPatch(typeof(GameInput), "UpdateKeyInputs")]
+       /* [HarmonyPatch(typeof(GameInput), "UpdateKeyInputs")]
         internal class UpdateKeyInputsPatch
         {
             public static bool Prefix(bool useKeyboard, bool useController, GameInput ___instance)
             {
-                if (XRInputManager.GetXRInputManager().leftController.TryGetFeatureValue(CommonUsages.menuButton, out var left) || XRInputManager.GetXRInputManager().rightController.TryGetFeatureValue(CommonUsages.menuButton, out var right))
-                {
-                    Debug.Log("This is the start button maybe");
-                }
-                return true;
-
-            }
-        }
-        /*GameInput.InputState[] inputStates = Traverse.Create(___instance).Field("inputStates").GetValue() as GameInput.InputState[];
+                GameInput.InputState[] inputStates = Traverse.Create(___instance).Field("inputStates").GetValue() as GameInput.InputState[];
                 List<GameInput.Input> inputs = Traverse.Create(___instance).Field("inputs").GetValue() as List<GameInput.Input>;
                 bool controllerEnabled = (bool)Traverse.Create(___instance).Field("controllerEnabled").GetValue();
                 GameInput.Device lastDevice = (GameInput.Device)Traverse.Create(___instance).Field("lastDevice").GetValue();
@@ -341,7 +340,7 @@ namespace VRTweaks
                             lastDevice = device;
                         }
                     }
-                  /*  else
+                    else
                     {
                         float axisValue = axisValues[(int)currentInput.axis];
                         bool isPressed;
