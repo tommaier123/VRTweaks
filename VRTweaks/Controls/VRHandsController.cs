@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using RootMotion.FinalIK;
+using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
@@ -92,44 +94,6 @@ namespace VRTweaks
                     ik.solver.rightHandEffector.target = rightController.transform;
                 }
             }
-            //for getting all the inputs for the right controller
-            /* if (XRInputManager.GetXRInputManager().rightController.TryGetFeatureUsages(inputFeatures))
-             {
-                 foreach (var feature in inputFeatures)
-                 {
-                     if (feature.type == typeof(bool))
-                     {
-                         bool featureValue;
-                         if (XRInputManager.GetXRInputManager().rightController.TryGetFeatureValue(feature.As<bool>(), out featureValue))
-                         {
-                             if (!File.ReadAllText("Logs/Right.txt").Contains(feature.name))
-                             {
-                                 File.AppendAllText("Logs/Right.txt", "Bool Feature: " + feature.name + " , Value: " + feature.ToString() + " , Type" + feature.type + Environment.NewLine);
-                                 //Debug.Log(string.Format("Right Bool feature {0}'s value is {1}", feature.name, featureValue.ToString()));
-                             }
-                         }
-                     }
-                 }
-             }
-            //for getting all the inputs for the left controller
-             if (XRInputManager.GetXRInputManager().leftController.TryGetFeatureUsages(inputFeatures))
-             {
-                 foreach (var feature in inputFeatures)
-                 {
-                     if (feature.type == typeof(bool))
-                     {
-                         bool featureValue;
-                         if (XRInputManager.GetXRInputManager().leftController.TryGetFeatureValue(feature.As<bool>(), out featureValue))
-                         {
-                             if (!File.ReadAllText("Logs/Left.txt").Contains(feature.name))
-                             {
-                                 File.AppendAllText("Logs/Left.txt", "Bool Feature: " + feature.name + " , Value: " + feature.ToString() + " , Type" + feature.type + Environment.NewLine);
-                                 //Debug.Log(string.Format("Left Bool feature {0}'s value is {1}", feature.name, featureValue.ToString()));
-                             }
-                         }
-                     }
-                 }
-             }*/
         }
 
         [HarmonyPatch(typeof(ArmsController))]
