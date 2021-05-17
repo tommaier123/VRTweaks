@@ -48,6 +48,9 @@
       <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\BepInEx\core\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PlatformInputDefault">
+      <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\PlatformInputDefault.dll</HintPath>
+    </Reference>
     <Reference Include="QModInstaller">
       <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\BepInEx\plugins\QModManager\QModInstaller.dll</HintPath>
     </Reference>
@@ -106,9 +109,9 @@
     <Compile Include="AudioFixes.cs" />
     <Compile Include="BubblesSubtitleFixer.cs" />
     <Compile Include="CameraPositionFixes.cs" />
-    <Compile Include="Controls\VRHandsController.cs" />
     <Compile Include="Controls\XRInputManager.cs" />
     <Compile Include="GazeLayerFix.cs" />
+    <Compile Include="MiscVrOptions.cs" />
     <Compile Include="PDAPositioning.cs" />
     <Compile Include="RecenterVRButtonAdder.cs" />
     <Compile Include="VolumeCloudPatches.cs" />

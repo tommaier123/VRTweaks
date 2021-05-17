@@ -20,6 +20,7 @@ namespace VRTweaks
         [QModPatch]
         public static void Initialize()
         {
+            //I guess if they don't want to play in vr they don't have to.
             if(!XRSettings.enabled)
             {
                 return;
@@ -31,8 +32,6 @@ namespace VRTweaks
 
             SnapTurningMenu.Patch();
 
-            VRTweaks.InitializeMainDevice();
-
             File.AppendAllText("VRTweaksLog.txt", "Done Initializing" + Environment.NewLine);
         }
     }
@@ -40,10 +39,9 @@ namespace VRTweaks
     public class VRTweaks : MonoBehaviour
     {
         //private static VRTweaks s_instance;
+        private TouchScreenKeyboard overlayKeyboard;
+        public static string inputText = "";
         public static List<InputDevice> vrDevices = new List<InputDevice>();
-        public static bool usingOculus;
-        public static bool usingVive;
-        public static bool usingIndex;
         public VRTweaks()
         {
             DontDestroyOnLoad(gameObject);
@@ -73,62 +71,30 @@ namespace VRTweaks
             {
                 Recenter();
             }
+            overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+            if (Input.GetKeyDown(KeyCode.RightAlt))
+            {
+                if (overlayKeyboard != null)
+                    inputText = overlayKeyboard.text;
+            }
         }
 
         public static void Recenter()
         {
-            if (usingOculus)
+            if (XRSettings.loadedDeviceName == "Oculus")
             {
                 File.AppendAllText("VRTweaksLog.txt", "Recentering Oculus" + Environment.NewLine);
                 OVRManager.display.RecenterPose();
                 return;
             }
 
-            if (usingVive || usingIndex)
+            if (XRSettings.loadedDeviceName == "OpenVR")
             {
                 File.AppendAllText("VRTweaksLog.txt", "Recentering OpenVR" + Environment.NewLine);
                 Valve.VR.OpenVR.System.ResetSeatedZeroPose();
                 Valve.VR.OpenVR.Compositor.SetTrackingSpace(Valve.VR.ETrackingUniverseOrigin.TrackingUniverseSeated);
                 return;
             }
-        }
-        //Auto detect device so i can choose controller layout
-        public static void InitializeMainDevice()
-        {
-            InputDevices.GetDevices(vrDevices);
-            foreach (var inputDevice in vrDevices)
-            {
-                if (inputDevice.characteristics.HasFlag(InputDeviceCharacteristics.HeadMounted))
-                {
-                    if (inputDevice.manufacturer.Contains("Oculus") || inputDevice.manufacturer.Contains("Quest") && inputDevice.isValid)
-                    {
-                        usingOculus = true;
-                    }
-                    else if (inputDevice.manufacturer.Contains("Vive") && inputDevice.isValid)
-                    {
-                        usingVive = true;
-                    }
-                    else if (inputDevice.manufacturer.Contains("Index") && inputDevice.isValid)
-                    {
-                        usingIndex = true;
-                    }
-                    else
-                    {
-                        usingOculus = false;
-                        usingVive = false;
-                        usingIndex = false;
-                    }
-                }
-
-                /*File.AppendAllText("Logs/VrInput.txt", "Name: " + inputDevice.name + Environment.NewLine);
-                File.AppendAllText("Logs/VrInput.txt", "Characteristics: " + inputDevice.characteristics + Environment.NewLine);
-                File.AppendAllText("Logs/VrInput.txt", "Manufacturer: " + inputDevice.manufacturer + Environment.NewLine);
-                File.AppendAllText("Logs/VrInput.txt", "Subsystem: " + inputDevice.subsystem + Environment.NewLine);
-                File.AppendAllText("Logs/VrInput.txt", "SerialNumber: " + inputDevice.serialNumber + Environment.NewLine);
-                File.AppendAllText("Logs/VrInput.txt", "isValid: " + inputDevice.isValid + Environment.NewLine);
-                File.AppendAllText("Logs/VrInput.txt", "        " + Environment.NewLine);*/
-            }
-
         }
     }
 }

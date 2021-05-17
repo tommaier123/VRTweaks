@@ -3,8 +3,10 @@ using UnityEngine;
 using UnityEngine.XR;
 using HarmonyLib;
 using System;
-using System.IO;
-using Valve.VR;
+using Platform.Utils;
+using FMODUnity;
+using UnityEngine.Events;
+
 namespace VRTweaks
 {
     enum Controller
@@ -17,8 +19,8 @@ namespace VRTweaks
     {
         private static readonly XRInputManager _instance = new XRInputManager();
         private readonly List<InputDevice> xrDevices = new List<InputDevice>();
-        public  InputDevice leftController;
-        public  InputDevice rightController;
+        public InputDevice leftController;
+        public InputDevice rightController;
 
 
         private XRInputManager()
@@ -33,9 +35,8 @@ namespace VRTweaks
 
         void GetDevices()
         {
-            Debug.Log("XrDevices: " + xrDevices);
             InputDevices.GetDevices(xrDevices);
-            
+
             foreach (InputDevice device in xrDevices)
             {
                 if (device.name.Contains("Left"))
@@ -150,45 +151,6 @@ namespace VRTweaks
             return hasController;
         }
 
-        public bool GetXRInput(KeyCode key)
-        {
-            switch (key)
-            {
-                case KeyCode.JoystickButton0:
-                    // ControllerButtonA
-                    return Get(Controller.Right, CommonUsages.primaryButton);
-                case KeyCode.JoystickButton1:
-                    // ControllerButtonB
-                    return Get(Controller.Right, CommonUsages.secondaryButton);
-                case KeyCode.JoystickButton2:
-                    // ControllerButtonX
-                    return Get(Controller.Left, CommonUsages.primaryButton);
-                case KeyCode.JoystickButton3:
-                    // ControllerButtonY
-                    return Get(Controller.Left, CommonUsages.secondaryButton);
-                case KeyCode.JoystickButton4:
-                    // ControllerButtonLeftBumper
-                    return Get(Controller.Left, CommonUsages.gripButton);
-                case KeyCode.JoystickButton5:
-                    // ControllerButtonRightBumper
-                    return Get(Controller.Right, CommonUsages.gripButton);
-                case KeyCode.JoystickButton6:
-                    // ControllerButtonBack - reservered by "oculus" button
-                    return false;
-                case KeyCode.JoystickButton7:
-                    // ControllerButtonHome
-                    return Get(Controller.Left, CommonUsages.menuButton);
-                case KeyCode.JoystickButton8:
-                    // ControllerButtonLeftStick
-                    return Get(Controller.Left, CommonUsages.primary2DAxisClick);
-                case KeyCode.JoystickButton9:
-                    // ControllerButtonRightStick
-                    return Get(Controller.Right, CommonUsages.primary2DAxisClick);
-                default:
-                    return false;
-            }
-        }
-
         [HarmonyPatch(typeof(GameInput), "UpdateAxisValues")]
         internal class UpdateAxisValuesPatch
         {
@@ -213,7 +175,21 @@ namespace VRTweaks
                 }
                 if (useController)
                 {
-                    if (VRTweaks.usingIndex || VRTweaks.usingVive || VRTweaks.usingOculus)
+                    //Oculus Axis Values
+                    if (XRSettings.loadedDeviceName == "Oculus")
+                    {
+                        Vector2 vector = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick, OVRInput.Controller.Active);
+                        axisValues[2] = vector.x;
+                        axisValues[3] = -vector.y;
+                        Vector2 vector2 = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick, OVRInput.Controller.Active);
+                        axisValues[0] = vector2.x;
+                        axisValues[1] = -vector2.y;
+                        // TODO: Use deadzone?
+                        axisValues[4] = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger, OVRInput.Controller.Active);
+                        axisValues[5] = OVRInput.Get(OVRInput.RawAxis1D.RIndexTrigger, OVRInput.Controller.Active);
+                    }
+                    //OpenVR Asix values
+                    else if (XRSettings.loadedDeviceName == "OpenVR")
                     {
                         Vector2 vector = xrInput.Get(Controller.Left, CommonUsages.primary2DAxis);
                         axisValues[2] = vector.x;
@@ -224,43 +200,10 @@ namespace VRTweaks
                         // TODO: Use deadzone?
                         axisValues[4] = xrInput.Get(Controller.Left, CommonUsages.trigger).CompareTo(0.3f);
                         axisValues[5] = xrInput.Get(Controller.Right, CommonUsages.trigger).CompareTo(0.3f);
-                        // Debug.Log("AxisValues6: " + axisValues[6]);
-                        // Debug.Log("AxisValues7: " + axisValues[7]);
-                        //axisValues[6] = vector2.x;
-                        //axisValues[7] = -vector2.y;
                     }
-                    //default oculus code
-                    /*else if (GetUseOculusInputManager)
-                    {
-                        Vector2 vector = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick, OVRInput.Controller.Active);
-                        axisValues[2] = vector.x;
-                        axisValues[3] = -vector.y;
-                        Vector2 vector2 = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick, OVRInput.Controller.Active);
-                        axisValues[0] = vector2.x;
-                        axisValues[1] = -vector2.y;
-                        axisValues[4] = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger, OVRInput.Controller.Active);
-                        axisValues[5] = OVRInput.Get(OVRInput.RawAxis1D.RIndexTrigger, OVRInput.Controller.Active);
-                        axisValues[6] = 0f;
-                        if (OVRInput.Get(OVRInput.RawButton.DpadLeft, OVRInput.Controller.Active))
-                        {
-                            axisValues[6] -= 1f;
-                        }
-                        if (OVRInput.Get(OVRInput.RawButton.DpadRight, OVRInput.Controller.Active))
-                        {
-                            axisValues[6] += 1f;
-                        }
-                        axisValues[7] = 0f;
-                        if (OVRInput.Get(OVRInput.RawButton.DpadUp, OVRInput.Controller.Active))
-                        {
-                            axisValues[7] += 1f;
-                        }
-                        if (OVRInput.Get(OVRInput.RawButton.DpadDown, OVRInput.Controller.Active))
-                        {
-                            axisValues[7] -= 1f;
-                        }
-                    }*/
                     else
                     {
+                        //Prolly should leave these here just in case.
                         GameInput.ControllerLayout controllerLayout = GetControllerLayout;
                         if (controllerLayout == GameInput.ControllerLayout.Xbox360 || controllerLayout == GameInput.ControllerLayout.XboxOne || Application.platform == RuntimePlatform.PS4)
                         {
@@ -285,6 +228,17 @@ namespace VRTweaks
                             }
                             axisValues[6] = Input.GetAxis("ControllerAxis6");
                             axisValues[7] = Input.GetAxis("ControllerAxis7");
+                        }
+                        else if (controllerLayout == GameInput.ControllerLayout.Switch)
+                        {
+                            axisValues[2] = InputUtils.GetAxis("ControllerAxis1");
+                            axisValues[3] = InputUtils.GetAxis("ControllerAxis2");
+                            axisValues[0] = InputUtils.GetAxis("ControllerAxis4");
+                            axisValues[1] = InputUtils.GetAxis("ControllerAxis5");
+                            axisValues[4] = Mathf.Max(InputUtils.GetAxis("ControllerAxis3"), 0f);
+                            axisValues[5] = Mathf.Max(-InputUtils.GetAxis("ControllerAxis3"), 0f);
+                            axisValues[6] = InputUtils.GetAxis("ControllerAxis6");
+                            axisValues[7] = InputUtils.GetAxis("ControllerAxis7");
                         }
                         else if (controllerLayout == GameInput.ControllerLayout.PS4)
                         {
@@ -331,115 +285,25 @@ namespace VRTweaks
             }
         }
 
-        //Need to find out when this is enabled why Joystick axis do not work correctly.
-       /* [HarmonyPatch(typeof(GameInput), "UpdateKeyInputs")]
-        internal class UpdateKeyInputsPatch
+        [HarmonyPatch(typeof(FPSInputModule))]
+        [HarmonyPatch("EscapeMenu")]
+        class ArmsController_Update_Patch
         {
-            public static bool Prefix(bool useKeyboard, bool useController, GameInput ___instance)
+            [HarmonyPrefix]
+            public static bool Prefix(FPSInputModule __instance)
             {
-                GameInput.InputState[] inputStates = Traverse.Create(___instance).Field("inputStates").GetValue() as GameInput.InputState[];
-                List<GameInput.Input> inputs = Traverse.Create(___instance).Field("inputs").GetValue() as List<GameInput.Input>;
-                bool controllerEnabled = (bool)Traverse.Create(___instance).Field("controllerEnabled").GetValue();
-                GameInput.Device lastDevice = (GameInput.Device)Traverse.Create(___instance).Field("lastDevice").GetValue();
-                float[] axisValues = Traverse.Create(___instance).Field("axisValues").GetValue() as float[];
-                int[] lastInputPressed = Traverse.Create(___instance).Field("lastInputPressed").GetValue() as int[];
-
-                XRInputManager xrInput = GetXRInputManager();
-                if (!xrInput.hasControllers())
+                if (__instance.lockPauseMenu)
                 {
-                    return true;
+                    return false;
                 }
-
-                float unscaledTime = Time.unscaledTime;
-                for (int i = 0; i < inputs.Count; i++)
+                //Press and hold pda to access escape menu with touch controllers (should be left controller menu button by default)
+                if (GameInput.GetButtonHeldTime(GameInput.Button.PDA) > 1.0f && IngameMenu.main != null && !IngameMenu.main.selected)
                 {
-                    GameInput.InputState inputState = default;
-                    GameInput.InputState prevInputState = inputStates[i];
-                    inputState.timeDown = prevInputState.timeDown;
-                    bool wasHeld = (prevInputState.flags & GameInput.InputStateFlags.Held) > 0U;
-
-                    GameInput.Input currentInput = inputs[i];
-                    GameInput.Device device = currentInput.device;
-                    KeyCode key = currentInput.keyCode;
-
-                    if (key != KeyCode.None)
-                    {
-                        bool pressed = xrInput.GetXRInput(key);
-                        GameInput.InputStateFlags prevState = inputStates[i].flags;
-                        if (pressed && (prevState == GameInput.InputStateFlags.Held && prevState == GameInput.InputStateFlags.Down))
-                        {
-                            inputState.flags |= GameInput.InputStateFlags.Held;
-                        }
-                        if (pressed && prevState == GameInput.InputStateFlags.Up)
-                        {
-                            inputState.flags |= GameInput.InputStateFlags.Down;
-                        }
-                        if (!pressed)
-                        {
-                            inputState.flags |= GameInput.InputStateFlags.Up;
-                        }
-                        if (inputState.flags != 0U && !PlatformUtils.isConsolePlatform && (controllerEnabled || device != GameInput.Device.Controller))
-                        {
-                            lastDevice = device;
-                        }
-                    }
-                    else
-                    {
-                        float axisValue = axisValues[(int)currentInput.axis];
-                        bool isPressed;
-                        if (inputs[i].axisPositive)
-                        {
-                            isPressed = (axisValue > currentInput.axisDeadZone);
-                        }
-                        else
-                        {
-                            isPressed = (axisValue < -currentInput.axisDeadZone);
-                        }
-                        if (isPressed)
-                        {
-                            inputState.flags |= GameInput.InputStateFlags.Held;
-                        }
-                        if (isPressed && !wasHeld)
-                        {
-                            inputState.flags |= GameInput.InputStateFlags.Down;
-                        }
-                        if (!isPressed && wasHeld)
-                        {
-                            inputState.flags |= GameInput.InputStateFlags.Up;
-                        }
-                    }
-
-                    if ((inputState.flags & GameInput.InputStateFlags.Down) != 0U)
-                    {
-                        int lastIndex = lastInputPressed[(int)device];
-                        int newIndex = i;
-                        inputState.timeDown = unscaledTime;
-                        if (lastIndex > -1)
-                        {
-                            GameInput.Input lastInput = inputs[lastIndex];
-                            bool isSameTime = inputState.timeDown == inputStates[lastIndex].timeDown;
-                            bool lastAxisIsGreater = Mathf.Abs(axisValues[(int)lastInput.axis]) > Mathf.Abs(axisValues[(int)currentInput.axis]);
-                            if (isSameTime && lastAxisIsGreater)
-                            {
-                                newIndex = lastIndex;
-                            }
-                        }
-                        lastInputPressed[(int)device] = newIndex;
-                    }
-
-                    if ((device == GameInput.Device.Controller && !useController) || (device == GameInput.Device.Keyboard && !useKeyboard))
-                    {
-                        inputState.flags = 0U;
-                        if (wasHeld)
-                        {
-                            inputState.flags |= GameInput.InputStateFlags.Up;
-                        }
-                    }
-                    inputStates[i] = inputState;
+                    IngameMenu.main.Open();
+                    GameInput.ClearInput();
                 }
-
                 return false;
             }
-        }*/
+        }
     }
 }
