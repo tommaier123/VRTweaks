@@ -39,8 +39,6 @@ namespace VRTweaks
     public class VRTweaks : MonoBehaviour
     {
         //private static VRTweaks s_instance;
-        private TouchScreenKeyboard overlayKeyboard;
-        public static string inputText = "";
         public static List<InputDevice> vrDevices = new List<InputDevice>();
         public VRTweaks()
         {
@@ -70,12 +68,6 @@ namespace VRTweaks
             if (Input.GetKeyDown(KeyCode.T))
             {
                 Recenter();
-            }
-            overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
-            if (Input.GetKeyDown(KeyCode.RightAlt))
-            {
-                if (overlayKeyboard != null)
-                    inputText = overlayKeyboard.text;
             }
         }
 
