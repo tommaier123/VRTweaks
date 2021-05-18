@@ -1,4 +1,6 @@
 ﻿using HarmonyLib;
+using UnityEngine;
+
 
 namespace VRTweaks
 {

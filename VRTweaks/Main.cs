@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using HarmonyLib;
 using QModManager.API.ModLoading;
@@ -7,13 +6,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.XR;
-using VRTweaks.SnapTurn;
 using System.Reflection;
 using UWE;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace VRTweaks
 {
+
     [QModCore]
     public static class Loader
     {
@@ -38,8 +38,6 @@ namespace VRTweaks
 
     public class VRTweaks : MonoBehaviour
     {
-        //private static VRTweaks s_instance;
-        public static List<InputDevice> vrDevices = new List<InputDevice>();
         public VRTweaks()
         {
             DontDestroyOnLoad(gameObject);
