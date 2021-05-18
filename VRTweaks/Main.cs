@@ -20,6 +20,11 @@ namespace VRTweaks
         [QModPatch]
         public static void Initialize()
         {
+            //I guess if they don't want to play in vr they don't have to.
+            if(!XRSettings.enabled)
+            {
+                return;
+            }
             File.AppendAllText("VRTweaksLog.txt", "Initializing" + Environment.NewLine);
 
             new GameObject("_VRTweaks").AddComponent<VRTweaks>();

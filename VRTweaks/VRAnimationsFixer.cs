@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
+
 namespace VRTweaks
 {
     [HarmonyPatch(typeof(GameOptions), "GetVrAnimationMode")]
@@ -14,3 +15,4 @@ namespace VRTweaks
         }
     }
 }
+

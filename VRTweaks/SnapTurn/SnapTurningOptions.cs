@@ -9,4 +9,3 @@ public static class SnapTurningOptions
     public static KeyCode KeybindKeyLeft = KeyCode.LeftArrow; //TODO: make these bindable in options menu
     public static KeyCode KeybindKeyRight = KeyCode.RightArrow;
 }
-

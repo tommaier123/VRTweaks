@@ -37,3 +37,4 @@ public static class SnapTurningMenu
         SnapTurningOptions.SnapAngleChoiceIndex = serializer.Serialize("VR/SnapAngleChoiceIndex", SnapTurningOptions.SnapAngleChoiceIndex);
     }
 }
+
