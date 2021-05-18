@@ -150,7 +150,7 @@ namespace VRTweaks
             }
             return hasController;
         }
-
+        
         [HarmonyPatch(typeof(GameInput), "UpdateAxisValues")]
         internal class UpdateAxisValuesPatch
         {
@@ -160,7 +160,7 @@ namespace VRTweaks
                 float[] lastAxisValues = Traverse.Create(___instance).Field("lastAxisValues").GetValue() as float[];
                 GameInput.Device lastDevice = (GameInput.Device)Traverse.Create(___instance).Field("lastDevice").GetValue();
 
-                bool GetUseOculusInputManager = (bool)Traverse.Create(___instance).Method("GetUseOculusInputManager").GetValue();
+              //  bool GetUseOculusInputManager = (bool)Traverse.Create(___instance).Method("GetUseOculusInputManager").GetValue();
                 GameInput.ControllerLayout GetControllerLayout = (GameInput.ControllerLayout)Traverse.Create(___instance).Method("GetControllerLayout").GetValue();
 
                 XRInputManager xrInput = GetXRInputManager();
