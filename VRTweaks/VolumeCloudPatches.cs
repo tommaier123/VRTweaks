@@ -122,18 +122,20 @@ namespace VRTweaks.VolumeCloudPatches
                     fullBufferIndexLeft = (fullBufferIndexLeft + 1) % 2;
                     single = ___offset[frameIndexLeft, 0];
                     single1 = ___offset[frameIndexLeft, 1];
-                }
+
+                } 
                 else
                 {
                     __instance.EnsureArray(ref fullBufferRight, 2, null);
                     __instance.EnsureRenderTarget(ref fullBufferRight[0], width, height, RenderTextureFormat.ARGBHalf, FilterMode.Bilinear, 0, 1);
-                    __instance.EnsureRenderTarget(ref fullBufferRight[1], width, height, RenderTextureFormat.ARGBHalf, FilterMode.Bilinear, 0, 1);
+                    __instance.EnsureRenderTarget(ref fullBufferRight[1], width, height, RenderTextureFormat.ARGBHalf, FilterMode.Bilinear, 0 ,1);
                     frameIndexRight = (frameIndexRight + 1) % 16;
                     fullBufferIndexRight = (fullBufferIndexRight + 1) % 2;
                     single = ___offset[frameIndexRight, 0];
                     single1 = ___offset[frameIndexRight, 1];
                 }
-                __instance.EnsureRenderTarget(ref ___lowresBuffer, width / 4, height / 4, RenderTextureFormat.ARGBHalf, FilterMode.Bilinear, 0, 1);
+
+                __instance.EnsureRenderTarget(ref ___lowresBuffer, width / 4, height / 4, RenderTextureFormat.ARGBHalf, FilterMode.Bilinear,0 ,1);
                 __instance.configuration.ApplyToMaterial(___blitMat);
                 SetupHeroCloud(__instance, ___blitMat);
                 ___blitMat.SetInt(ShaderPropertyID._ForceOutOfBound, ___forceOutOfBound);
@@ -154,8 +156,10 @@ namespace VRTweaks.VolumeCloudPatches
                 {
                     Graphics.Blit(fullBufferLeft[fullBufferIndexLeft], fullBufferLeft[fullBufferIndexLeft ^ 1], ___blitMat, 1);
                     Shader.SetGlobalTexture(ShaderPropertyID._CloudTex, fullBufferLeft[fullBufferIndexLeft ^ 1]);
-                }
-                else
+
+                } 
+              else
+
                 {
                     Graphics.Blit(fullBufferRight[fullBufferIndexRight], fullBufferRight[fullBufferIndexRight ^ 1], ___blitMat, 1);
                     Shader.SetGlobalTexture(ShaderPropertyID._CloudTex, fullBufferRight[fullBufferIndexRight ^ 1]);
@@ -164,8 +168,7 @@ namespace VRTweaks.VolumeCloudPatches
                 if (isLeftEye)
                 {
                     prevV_Left = ___mcam.worldToCameraMatrix;
-                }
-                else
+                } else
                 {
                     prevV_Right = ___mcam.worldToCameraMatrix;
                 }
