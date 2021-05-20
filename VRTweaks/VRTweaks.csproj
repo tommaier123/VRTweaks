@@ -93,7 +93,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>H:\Steam Games SSD\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(CommonDir)SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule">
       <HintPath>$(CommonDir)SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.VRModule.dll</HintPath>
