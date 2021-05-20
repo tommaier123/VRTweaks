@@ -3,6 +3,9 @@ using HarmonyLib;
 using System.Linq;
 using TMPro;
 
+// The method in this class was copied from IWhoI's VREnhancements mod for the original Subnautica
+// https://github.com/IWhoI/SubnauticaVREnhancements/blob/master/VREnhancements/MainPatcher.cs
+
 [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Awake))]
 public static class RecenterVRButtonAdder
 {
@@ -10,7 +13,8 @@ public static class RecenterVRButtonAdder
 
     [HarmonyPostfix]
     public static void Postfix(IngameMenu __instance)
-    {
+    {        
+        //code copied from the quit to desktop mod and modified
         if (__instance != null && recenterVRButton == null)
         {
             //I think this is copying an existing button
