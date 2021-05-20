@@ -38,6 +38,8 @@ namespace VRTweaks
 
     public class VRTweaks : MonoBehaviour
     {
+        //private static VRTweaks s_instance;
+
         public VRTweaks()
         {
             DontDestroyOnLoad(gameObject);

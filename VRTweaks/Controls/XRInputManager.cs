@@ -150,7 +150,7 @@ namespace VRTweaks
             }
             return hasController;
         }
-        
+
         [HarmonyPatch(typeof(GameInput), "UpdateAxisValues")]
         internal class UpdateAxisValuesPatch
         {
@@ -160,14 +160,13 @@ namespace VRTweaks
                 float[] lastAxisValues = Traverse.Create(___instance).Field("lastAxisValues").GetValue() as float[];
                 GameInput.Device lastDevice = (GameInput.Device)Traverse.Create(___instance).Field("lastDevice").GetValue();
 
-              //  bool GetUseOculusInputManager = (bool)Traverse.Create(___instance).Method("GetUseOculusInputManager").GetValue();
+                bool GetUseOculusInputManager = (bool)Traverse.Create(___instance).Method("GetUseOculusInputManager").GetValue();
                 GameInput.ControllerLayout GetControllerLayout = (GameInput.ControllerLayout)Traverse.Create(___instance).Method("GetControllerLayout").GetValue();
-
                 XRInputManager xrInput = GetXRInputManager();
-                if (!xrInput.hasControllers())
+                /*if (!xrInput.hasControllers())
                 {
                     return true;
-                }
+                }*/
 
                 for (int i = 0; i < axisValues.Length; i++)
                 {
@@ -175,8 +174,7 @@ namespace VRTweaks
                 }
                 if (useController)
                 {
-                    //Oculus Axis Values
-                    if (XRSettings.loadedDeviceName == "Oculus")
+                    if (GetUseOculusInputManager)
                     {
                         Vector2 vector = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick, OVRInput.Controller.Active);
                         axisValues[2] = vector.x;
@@ -184,22 +182,26 @@ namespace VRTweaks
                         Vector2 vector2 = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick, OVRInput.Controller.Active);
                         axisValues[0] = vector2.x;
                         axisValues[1] = -vector2.y;
-                        // TODO: Use deadzone?
                         axisValues[4] = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger, OVRInput.Controller.Active);
                         axisValues[5] = OVRInput.Get(OVRInput.RawAxis1D.RIndexTrigger, OVRInput.Controller.Active);
-                    }
-                    //OpenVR Asix values
-                    else if (XRSettings.loadedDeviceName == "OpenVR")
-                    {
-                        Vector2 vector = xrInput.Get(Controller.Left, CommonUsages.primary2DAxis);
-                        axisValues[2] = vector.x;
-                        axisValues[3] = -vector.y;
-                        Vector2 vector2 = xrInput.Get(Controller.Right, CommonUsages.primary2DAxis);
-                        axisValues[0] = vector2.x;
-                        axisValues[1] = -vector2.y;
-                        // TODO: Use deadzone?
-                        axisValues[4] = xrInput.Get(Controller.Left, CommonUsages.trigger).CompareTo(0.3f);
-                        axisValues[5] = xrInput.Get(Controller.Right, CommonUsages.trigger).CompareTo(0.3f);
+                        axisValues[6] = 0f;
+                        if (OVRInput.Get(OVRInput.RawButton.DpadLeft, OVRInput.Controller.Active))
+                        {
+                            axisValues[6] -= 1f;
+                        }
+                        if (OVRInput.Get(OVRInput.RawButton.DpadRight, OVRInput.Controller.Active))
+                        {
+                            axisValues[6] += 1f;
+                        }
+                        axisValues[7] = 0f;
+                        if (OVRInput.Get(OVRInput.RawButton.DpadUp, OVRInput.Controller.Active))
+                        {
+                            axisValues[7] += 1f;
+                        }
+                        if (OVRInput.Get(OVRInput.RawButton.DpadDown, OVRInput.Controller.Active))
+                        {
+                            axisValues[7] -= 1f;
+                        }
                     }
                     else
                     {
@@ -252,6 +254,55 @@ namespace VRTweaks
                             axisValues[7] = Input.GetAxis("ControllerAxis8");
                         }
                     }
+                    if (xrInput.hasControllers())
+                    {
+                        if (XRSettings.loadedDeviceName == "Oculus")
+                        {
+                            Vector2 vector = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick, OVRInput.Controller.Active);
+                            axisValues[2] = vector.x;
+                            axisValues[3] = -vector.y;
+                            Vector2 vector2 = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick, OVRInput.Controller.Active);
+                            axisValues[0] = vector2.x;
+                            axisValues[1] = -vector2.y;
+                            // TODO: Use deadzone?
+                            axisValues[4] = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger, OVRInput.Controller.Active);
+                            axisValues[5] = OVRInput.Get(OVRInput.RawAxis1D.RIndexTrigger, OVRInput.Controller.Active);
+                            if (OVRInput.Get(OVRInput.RawButton.DpadLeft, OVRInput.Controller.Active))
+                            {
+                                axisValues[6] -= 1f;
+                            }
+                            if (OVRInput.Get(OVRInput.RawButton.DpadRight, OVRInput.Controller.Active))
+                            {
+                                axisValues[6] += 1f;
+                            }
+                            axisValues[7] = 0f;
+                            if (OVRInput.Get(OVRInput.RawButton.DpadUp, OVRInput.Controller.Active))
+                            {
+                                axisValues[7] += 1f;
+                            }
+                            if (OVRInput.Get(OVRInput.RawButton.DpadDown, OVRInput.Controller.Active))
+                            {
+                                axisValues[7] -= 1f;
+                            }
+                        }
+                        //OpenVR Asix values
+                        /*if (XRSettings.loadedDeviceName == "OpenVR")
+                        {
+                            Vector2 vector = xrInput.Get(Controller.Left, CommonUsages.primary2DAxis);
+                            axisValues[2] = vector.x;
+                            axisValues[3] = -vector.y;
+                            Vector2 vector2 = xrInput.Get(Controller.Right, CommonUsages.primary2DAxis);
+                            axisValues[0] = vector2.x;
+                            axisValues[1] = -vector2.y;
+                            // TODO: Use deadzone?
+                            axisValues[4] = xrInput.Get(Controller.Left, CommonUsages.trigger).CompareTo(0.3f);
+                            axisValues[5] = xrInput.Get(Controller.Right, CommonUsages.trigger).CompareTo(0.3f);
+
+                            //These axis I'm sure are used for something on other headsets
+                            //axisValues[6] = xrInput.Get(Controller.Left, CommonUsages.secondary2DAxisTouch).CompareTo(0.1f);
+                            //axisValues[7] = xrInput.Get(Controller.Right, CommonUsages.secondaryTouch).CompareTo(0.1f);
+                        }*/
+                    }
                 }
                 if (useKeyboard)
                 {
@@ -285,25 +336,24 @@ namespace VRTweaks
             }
         }
 
-        [HarmonyPatch(typeof(FPSInputModule))]
-        [HarmonyPatch("EscapeMenu")]
-        class ArmsController_Update_Patch
+        [HarmonyPatch(typeof(FPSInputModule), nameof(FPSInputModule.EscapeMenu))]
+        class FPSInputModule_EscapeMenu_Patch
         {
+            //GameInput.GetButtonHeldTime(GameInput.Button.PDA) > 1.0f
             [HarmonyPrefix]
-            public static bool Prefix(FPSInputModule __instance)
+            static void Prefix(FPSInputModule __instance)
             {
                 if (__instance.lockPauseMenu)
                 {
-                    return false;
+                    return;
                 }
-                //Press and hold pda to access escape menu with touch controllers (should be left controller menu button by default)
-                if (GameInput.GetButtonHeldTime(GameInput.Button.PDA) > 1.0f && IngameMenu.main != null && !IngameMenu.main.selected)
+                if (GameInput.GetButtonDown(GameInput.Button.UIMenu) && IngameMenu.main != null && !IngameMenu.main.selected || GameInput.GetButtonHeldTime(GameInput.Button.PDA) > 1.0f)
                 {
                     IngameMenu.main.Open();
                     GameInput.ClearInput();
                 }
-                return false;
             }
         }
     }
 }
+
