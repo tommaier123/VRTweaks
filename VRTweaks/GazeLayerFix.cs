@@ -35,10 +35,11 @@ namespace VRTweaks.Fixes
                 VROptions.gazeBasedCursor = actualGazedBasedCursor;
                 //Fix the problem with the cursor rendering behind UI elements.
                 Canvas cursorCanvas = __instance._cursor.GetComponentInChildren<Graphic>().canvas;
-                RaycastResult lastRaycastResult = Traverse.Create(__instance).Field("lastRaycastResult").GetValue<RaycastResult>();
+                RaycastResult lastRaycastResult = __instance.lastRaycastResult;
                 if (cursorCanvas && lastRaycastResult.isValid)
                 {
-                    cursorCanvas.sortingLayerID = lastRaycastResult.sortingLayer;//put the cursor on the same layer as whatever was hit by the cursor raycast.
+                    //put the cursor on the same layer as whatever was hit by the cursor raycast.
+                    cursorCanvas.sortingLayerID = lastRaycastResult.sortingLayer;
                 }
             }
         }

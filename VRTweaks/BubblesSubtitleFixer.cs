@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using UnityEngine;
-using UWE;
+
 
 namespace VRTweaks
 {
@@ -16,15 +16,14 @@ namespace VRTweaks
         }
     }
 
-    //Dosen't seem to work in anything other then Update, need to find a way so I don't have to use hardcoded values
-    [HarmonyPatch(typeof(Subtitles), "Update")]
-    public static class SubtitleFixer
+    [HarmonyPatch(typeof(Subtitles), "Awake")]
+    public static class SubtitlesFixer
     {
-        [HarmonyPrefix]
-        public static bool Prefix(Subtitles __instance)
+        [HarmonyPostfix]
+        public static void Postfix(Subtitles __instance)
         {
-            __instance.transform.parent.localPosition = new Vector3(-457.6f, -432.5f, 0.0f);
-            return true;
+            __instance.transform.parent.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            __instance.transform.parent.localPosition = new Vector3(-237.6f, +225.0f, 0.0f);
         }
     }
 }

@@ -5,41 +5,6 @@ using Yangrc.VolumeCloud;
 
 namespace VRTweaks.VolumeCloudPatches
 {
-
-    // Reverse patches to call from replacement method
-    [HarmonyPatch]
-    class VolumeCloudRenderer_EnsureMaterial_ReversePatch
-    {
-        [HarmonyReversePatch]
-        [HarmonyPatch(typeof(VolumeCloudRenderer), nameof(VolumeCloudRenderer.EnsureMaterial), new Type[] { typeof(bool) })]
-        public static void Run(object instance, bool force)
-        {
-            throw new NotImplementedException("Stub for reverse patch.");
-        }
-    }
-
-    [HarmonyPatch]
-    class VolumeCloudRenderer_GetWidth_ReversePatch
-    {
-        [HarmonyReversePatch]
-        [HarmonyPatch(typeof(VolumeCloudRenderer), nameof(VolumeCloudRenderer.GetWidth))]
-        public static int Run(object instance)
-        {
-            throw new NotImplementedException("Stub for reverse patch.");
-        }
-    }
-
-    [HarmonyPatch]
-    class VolumeCloudRenderer_GetHeight_ReversePatch
-    {
-        [HarmonyReversePatch]
-        [HarmonyPatch(typeof(VolumeCloudRenderer), nameof(VolumeCloudRenderer.GetHeight))]
-        public static int Run(object instance)
-        {
-            throw new NotImplementedException("Stub for reverse patch.");
-        }
-    }
-
     [HarmonyPatch(typeof(VolumeCloudRenderer), nameof(VolumeCloudRenderer.RenderFrame))]
     class RenderFrameReplacement
     {
@@ -107,10 +72,10 @@ namespace VRTweaks.VolumeCloudPatches
             }
             else
             {
-                VolumeCloudRenderer_EnsureMaterial_ReversePatch.Run(__instance, ___qualityChanged);
+                __instance.EnsureMaterial(___qualityChanged);
                 ___blitMat.DisableKeyword("CLOUDS_TO_SPHEREMAP");
-                var width = VolumeCloudRenderer_GetWidth_ReversePatch.Run(__instance);
-                var height = VolumeCloudRenderer_GetHeight_ReversePatch.Run(__instance);
+                var width = __instance.GetWidth();
+                var height = __instance.GetHeight();
                 float single;
                 float single1;
                 if (isLeftEye)

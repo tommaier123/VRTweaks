@@ -156,179 +156,172 @@ namespace VRTweaks
         {
             public static bool Prefix(bool useKeyboard, bool useController, GameInput ___instance)
             {
-                float[] axisValues = Traverse.Create(___instance).Field("axisValues").GetValue() as float[];
-                float[] lastAxisValues = Traverse.Create(___instance).Field("lastAxisValues").GetValue() as float[];
-                GameInput.Device lastDevice = (GameInput.Device)Traverse.Create(___instance).Field("lastDevice").GetValue();
-
-                bool GetUseOculusInputManager = (bool)Traverse.Create(___instance).Method("GetUseOculusInputManager").GetValue();
-                GameInput.ControllerLayout GetControllerLayout = (GameInput.ControllerLayout)Traverse.Create(___instance).Method("GetControllerLayout").GetValue();
                 XRInputManager xrInput = GetXRInputManager();
-                /*if (!xrInput.hasControllers())
-                {
-                    return true;
-                }*/
 
-                for (int i = 0; i < axisValues.Length; i++)
+                for (int i = 0; i < GameInput.axisValues.Length; i++)
                 {
-                    axisValues[i] = 0f;
+                    GameInput.axisValues[i] = 0f;
                 }
+
                 if (useController)
                 {
-                    if (GetUseOculusInputManager)
+                    if (GameInput.GetUseOculusInputManager() && XRSettings.loadedDeviceName != "Oculus")
                     {
                         Vector2 vector = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick, OVRInput.Controller.Active);
-                        axisValues[2] = vector.x;
-                        axisValues[3] = -vector.y;
+                        GameInput.axisValues[2] = vector.x;
+                        GameInput.axisValues[3] = -vector.y;
                         Vector2 vector2 = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick, OVRInput.Controller.Active);
-                        axisValues[0] = vector2.x;
-                        axisValues[1] = -vector2.y;
-                        axisValues[4] = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger, OVRInput.Controller.Active);
-                        axisValues[5] = OVRInput.Get(OVRInput.RawAxis1D.RIndexTrigger, OVRInput.Controller.Active);
-                        axisValues[6] = 0f;
+                        GameInput.axisValues[0] = vector2.x;
+                        GameInput.axisValues[1] = -vector2.y;
+                        GameInput.axisValues[4] = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger, OVRInput.Controller.Active);
+                        GameInput.axisValues[5] = OVRInput.Get(OVRInput.RawAxis1D.RIndexTrigger, OVRInput.Controller.Active);
+                        GameInput.axisValues[6] = 0f;
                         if (OVRInput.Get(OVRInput.RawButton.DpadLeft, OVRInput.Controller.Active))
                         {
-                            axisValues[6] -= 1f;
+                            GameInput.axisValues[6] -= 1f;
                         }
                         if (OVRInput.Get(OVRInput.RawButton.DpadRight, OVRInput.Controller.Active))
                         {
-                            axisValues[6] += 1f;
+                            GameInput.axisValues[6] += 1f;
                         }
-                        axisValues[7] = 0f;
+                        GameInput.axisValues[7] = 0f;
                         if (OVRInput.Get(OVRInput.RawButton.DpadUp, OVRInput.Controller.Active))
                         {
-                            axisValues[7] += 1f;
+                            GameInput.axisValues[7] += 1f;
                         }
                         if (OVRInput.Get(OVRInput.RawButton.DpadDown, OVRInput.Controller.Active))
                         {
-                            axisValues[7] -= 1f;
+                            GameInput.axisValues[7] -= 1f;
                         }
                     }
                     else
                     {
-                        //Prolly should leave these here just in case.
-                        GameInput.ControllerLayout controllerLayout = GetControllerLayout;
+                        GameInput.ControllerLayout controllerLayout = GameInput.GetControllerLayout();
                         if (controllerLayout == GameInput.ControllerLayout.Xbox360 || controllerLayout == GameInput.ControllerLayout.XboxOne || Application.platform == RuntimePlatform.PS4)
                         {
-                            axisValues[2] = Input.GetAxis("ControllerAxis1");
-                            axisValues[3] = Input.GetAxis("ControllerAxis2");
-                            axisValues[0] = Input.GetAxis("ControllerAxis4");
-                            axisValues[1] = Input.GetAxis("ControllerAxis5");
+                            GameInput.axisValues[2] = Input.GetAxis("ControllerAxis1");
+                            GameInput.axisValues[3] = Input.GetAxis("ControllerAxis2");
+                            GameInput.axisValues[0] = Input.GetAxis("ControllerAxis4");
+                            GameInput.axisValues[1] = Input.GetAxis("ControllerAxis5");
                             if (Application.platform == RuntimePlatform.PS4)
                             {
-                                axisValues[4] = Mathf.Max(Input.GetAxis("ControllerAxis8"), 0f);
-                                axisValues[5] = Mathf.Max(-Input.GetAxis("ControllerAxis3"), 0f);
+                                GameInput.axisValues[4] = Mathf.Max(Input.GetAxis("ControllerAxis8"), 0f);
+                                GameInput.axisValues[5] = Mathf.Max(-Input.GetAxis("ControllerAxis3"), 0f);
                             }
                             else if (Application.platform == RuntimePlatform.XboxOne)
                             {
-                                axisValues[4] = Mathf.Max(Input.GetAxis("ControllerAxis3"), 0f);
-                                axisValues[5] = Mathf.Max(-Input.GetAxis("ControllerAxis3"), 0f);
+                                GameInput.axisValues[4] = Mathf.Max(Input.GetAxis("ControllerAxis3"), 0f);
+                                GameInput.axisValues[5] = Mathf.Max(-Input.GetAxis("ControllerAxis3"), 0f);
                             }
                             else
                             {
-                                axisValues[4] = Mathf.Max(-Input.GetAxis("ControllerAxis3"), 0f);
-                                axisValues[5] = Mathf.Max(Input.GetAxis("ControllerAxis3"), 0f);
+                                GameInput.axisValues[4] = Mathf.Max(-Input.GetAxis("ControllerAxis3"), 0f);
+                                GameInput.axisValues[5] = Mathf.Max(Input.GetAxis("ControllerAxis3"), 0f);
                             }
-                            axisValues[6] = Input.GetAxis("ControllerAxis6");
-                            axisValues[7] = Input.GetAxis("ControllerAxis7");
+                            GameInput.axisValues[6] = Input.GetAxis("ControllerAxis6");
+                            GameInput.axisValues[7] = Input.GetAxis("ControllerAxis7");
                         }
                         else if (controllerLayout == GameInput.ControllerLayout.Switch)
                         {
-                            axisValues[2] = InputUtils.GetAxis("ControllerAxis1");
-                            axisValues[3] = InputUtils.GetAxis("ControllerAxis2");
-                            axisValues[0] = InputUtils.GetAxis("ControllerAxis4");
-                            axisValues[1] = InputUtils.GetAxis("ControllerAxis5");
-                            axisValues[4] = Mathf.Max(InputUtils.GetAxis("ControllerAxis3"), 0f);
-                            axisValues[5] = Mathf.Max(-InputUtils.GetAxis("ControllerAxis3"), 0f);
-                            axisValues[6] = InputUtils.GetAxis("ControllerAxis6");
-                            axisValues[7] = InputUtils.GetAxis("ControllerAxis7");
+                            GameInput.axisValues[2] = InputUtils.GetAxis("ControllerAxis1");
+                            GameInput.axisValues[3] = InputUtils.GetAxis("ControllerAxis2");
+                            GameInput.axisValues[0] = InputUtils.GetAxis("ControllerAxis4");
+                            GameInput.axisValues[1] = InputUtils.GetAxis("ControllerAxis5");
+                            GameInput.axisValues[4] = Mathf.Max(InputUtils.GetAxis("ControllerAxis3"), 0f);
+                            GameInput.axisValues[5] = Mathf.Max(-InputUtils.GetAxis("ControllerAxis3"), 0f);
+                            GameInput.axisValues[6] = InputUtils.GetAxis("ControllerAxis6");
+                            GameInput.axisValues[7] = InputUtils.GetAxis("ControllerAxis7");
                         }
                         else if (controllerLayout == GameInput.ControllerLayout.PS4)
                         {
-                            axisValues[2] = Input.GetAxis("ControllerAxis1");
-                            axisValues[3] = Input.GetAxis("ControllerAxis2");
-                            axisValues[0] = Input.GetAxis("ControllerAxis3");
-                            axisValues[1] = Input.GetAxis("ControllerAxis6");
-                            axisValues[4] = (Input.GetAxis("ControllerAxis4") + 1f) * 0.5f;
-                            axisValues[5] = (Input.GetAxis("ControllerAxis5") + 1f) * 0.5f;
-                            axisValues[6] = Input.GetAxis("ControllerAxis7");
-                            axisValues[7] = Input.GetAxis("ControllerAxis8");
+                            GameInput.axisValues[2] = Input.GetAxis("ControllerAxis1");
+                            GameInput.axisValues[3] = Input.GetAxis("ControllerAxis2");
+                            GameInput.axisValues[0] = Input.GetAxis("ControllerAxis3");
+                            GameInput.axisValues[1] = Input.GetAxis("ControllerAxis6");
+                            GameInput.axisValues[4] = (Input.GetAxis("ControllerAxis4") + 1f) * 0.5f;
+                            GameInput.axisValues[5] = (Input.GetAxis("ControllerAxis5") + 1f) * 0.5f;
+                            GameInput.axisValues[6] = Input.GetAxis("ControllerAxis7");
+                            GameInput.axisValues[7] = Input.GetAxis("ControllerAxis8");
                         }
                     }
+
                     if (xrInput.hasControllers())
                     {
                         if (XRSettings.loadedDeviceName == "Oculus")
                         {
                             Vector2 vector = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick, OVRInput.Controller.Active);
-                            axisValues[2] = vector.x;
-                            axisValues[3] = -vector.y;
+                            GameInput.axisValues[2] = vector.x;
+                            GameInput.axisValues[3] = -vector.y;
                             Vector2 vector2 = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick, OVRInput.Controller.Active);
-                            axisValues[0] = vector2.x;
-                            axisValues[1] = -vector2.y;
+                            GameInput.axisValues[0] = vector2.x;
+                            GameInput.axisValues[1] = -vector2.y;
                             // TODO: Use deadzone?
-                            axisValues[4] = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger, OVRInput.Controller.Active);
-                            axisValues[5] = OVRInput.Get(OVRInput.RawAxis1D.RIndexTrigger, OVRInput.Controller.Active);
+                            GameInput.axisValues[4] = OVRInput.Get(OVRInput.RawAxis1D.LIndexTrigger, OVRInput.Controller.Active);
+                            GameInput.axisValues[5] = OVRInput.Get(OVRInput.RawAxis1D.RIndexTrigger, OVRInput.Controller.Active);
                             if (OVRInput.Get(OVRInput.RawButton.DpadLeft, OVRInput.Controller.Active))
                             {
-                                axisValues[6] -= 1f;
+                                GameInput.axisValues[6] -= 1f;
                             }
                             if (OVRInput.Get(OVRInput.RawButton.DpadRight, OVRInput.Controller.Active))
                             {
-                                axisValues[6] += 1f;
+                                GameInput.axisValues[6] += 1f;
                             }
-                            axisValues[7] = 0f;
+                            GameInput.axisValues[7] = 0f;
                             if (OVRInput.Get(OVRInput.RawButton.DpadUp, OVRInput.Controller.Active))
                             {
-                                axisValues[7] += 1f;
+                                GameInput.axisValues[7] += 1f;
                             }
                             if (OVRInput.Get(OVRInput.RawButton.DpadDown, OVRInput.Controller.Active))
                             {
-                                axisValues[7] -= 1f;
+                                GameInput.axisValues[7] -= 1f;
                             }
                         }
+                        bool test = false;
                         //OpenVR Asix values
-                        /*if (XRSettings.loadedDeviceName == "OpenVR")
+                        if (XRSettings.loadedDeviceName == "OpenVR" && test)
                         {
                             Vector2 vector = xrInput.Get(Controller.Left, CommonUsages.primary2DAxis);
-                            axisValues[2] = vector.x;
-                            axisValues[3] = -vector.y;
+                            GameInput.axisValues[2] = vector.x;
+                            GameInput.axisValues[3] = -vector.y;
                             Vector2 vector2 = xrInput.Get(Controller.Right, CommonUsages.primary2DAxis);
-                            axisValues[0] = vector2.x;
-                            axisValues[1] = -vector2.y;
+                            GameInput.axisValues[0] = vector2.x;
+                            GameInput.axisValues[1] = -vector2.y;
                             // TODO: Use deadzone?
-                            axisValues[4] = xrInput.Get(Controller.Left, CommonUsages.trigger).CompareTo(0.3f);
-                            axisValues[5] = xrInput.Get(Controller.Right, CommonUsages.trigger).CompareTo(0.3f);
+                            GameInput.axisValues[4] = xrInput.Get(Controller.Left, CommonUsages.trigger).CompareTo(0.3f);
+                            GameInput.axisValues[5] = xrInput.Get(Controller.Right, CommonUsages.trigger).CompareTo(0.3f);
 
                             //These axis I'm sure are used for something on other headsets
                             //axisValues[6] = xrInput.Get(Controller.Left, CommonUsages.secondary2DAxisTouch).CompareTo(0.1f);
                             //axisValues[7] = xrInput.Get(Controller.Right, CommonUsages.secondaryTouch).CompareTo(0.1f);
-                        }*/
+                        }
                     }
                 }
+
                 if (useKeyboard)
                 {
-                    axisValues[10] = Input.GetAxis("Mouse ScrollWheel");
-                    axisValues[8] = Input.GetAxisRaw("Mouse X");
-                    axisValues[9] = Input.GetAxisRaw("Mouse Y");
+                    GameInput.axisValues[10] = Input.GetAxis("Mouse ScrollWheel");
+                    GameInput.axisValues[8] = Input.GetAxisRaw("Mouse X");
+                    GameInput.axisValues[9] = Input.GetAxisRaw("Mouse Y");
                 }
-                for (int j = 0; j < axisValues.Length; j++)
+                for (int j = 0; j < GameInput.axisValues.Length; j++)
                 {
                     GameInput.AnalogAxis axis = (GameInput.AnalogAxis)j;
-                    GameInput.Device deviceForAxis = (GameInput.Device)Traverse.Create(___instance).Method("GetDeviceForAxis", axis).GetValue();// ___instance.GetDeviceForAxis(axis);
-                    float f = lastAxisValues[j] - axisValues[j];
-                    lastAxisValues[j] = axisValues[j];
-                    if (deviceForAxis != lastDevice)
+                    GameInput.Device deviceForAxis = ___instance.GetDeviceForAxis(axis);
+                    float f = GameInput.lastAxisValues[j] - GameInput.axisValues[j];
+                    GameInput.lastAxisValues[j] = GameInput.axisValues[j];
+                    if (deviceForAxis != GameInput.lastDevice)
                     {
                         float num = 0.1f;
                         if (Mathf.Abs(f) > num)
                         {
                             if (!PlatformUtils.isConsolePlatform)
                             {
-                                lastDevice = deviceForAxis;
+                                GameInput.lastDevice = deviceForAxis;
                             }
                         }
                         else
                         {
-                            axisValues[j] = 0f;
+                            GameInput.axisValues[j] = 0f;
                         }
                     }
                 }

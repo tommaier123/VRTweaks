@@ -57,7 +57,6 @@ namespace VRTweaks
         [HarmonyPatch(typeof(PDA), nameof(PDA.Open))]
         public class PDA_Open_Patch
         {
-
             static void Postfix(PDA __instance, bool __result)
             {
                 if (__result)
